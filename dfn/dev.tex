@@ -1,0 +1,133 @@
+% Developer Terminology
+%
+% Intended to be included within its own section.
+
+Definitions within this subsection are used most frequently by the Software
+developers addressed by this specification.
+
+\begin{description}
+  \dt{apply}
+  Providing a list of arguments to a function---which are in turn bound to its
+  respective parameters in an implementation-specific manner---and replacing the
+  application with the value returned from the function after its execution. The
+  result of applying a procedure is implementation-defined (since procedures
+  return no value).
+
+  \dt{argument}
+  The value bound to a parameter during a function application.
+
+  \dt{array}
+  A string of values of a single data type $T$; said to be an ``array of type
+  $T$'' or simply an ``array of $T$''. An array of arrays is said to be
+  multidimensional.
+
+  \dt{bit}
+  A value of $0$ or $1$.
+
+  \dt{boolean}
+  A datatype whose storage is capable of representing a value of $1$ or $0$.
+
+  \dt{byte}
+  A bit string of machine-dependent length that \shall be at least $8$ bits.
+
+  \dt{call}
+  Provides an argument list to a procedure---which are in turn bound to its
+  respective parameters in an implementation-specific manner---and executes the
+  procedure. If a function is called, the use of its return value is
+  implementation-defined; some implementations use the terms ``call'' and
+  ``apply'' interchangeably.
+
+  \dt{character}
+  The numeric constant representing a symbol of a character set; there exist
+  both single-byte character sets (such as ASCII) and multi-byte (such as
+  Unicode); this term \shallnot be synonymous with ``byte'' in this
+  specification.
+
+  \dt{data}
+  The plural form of ``datum''.
+
+  \dt{data type}
+  Synonymous with freestanding ``type''; the type of a datum or data; dictates
+  how the data are interpreted. For example, the hexadecimal value \hex{41} may
+  represent the ASCII letter `A' when interpreted as a character type, but may
+  represent the decimal value $65$ when interpreted as an integer.
+
+  \dt{datatype}
+  A definition for an interpretation of a datum or data. Examples of datatype
+  include integers, characters, floats, and vectors.
+
+  \dt{datum}
+  The singular form of ``data''; an arbitrary unit of information whose
+  interpretation is determined by its type.
+
+  \dt{dimensions (data)}
+  The depth of the data; can be defined inductively as follows: Let the basis be
+  a scalar value having depth $d=0$. Let the depth of an array $A$ be the depth
+  of its data type $d'+1$.\footnote{As an example, an ``array of an array of
+  integers`` would have a depth of $2$ as follows: an integer is a scalar and so
+  its depth is $0$; adding $1$, we get the depth of an ``array of integers'',
+  which is $1$; finally, we add $1$ to get the depth of an ``array of an array
+  of integers''.}
+
+  \dt{float}
+  A datatype using binary floating point.
+
+  \dt{floating point}
+  A binary approximation of a real number up to a fixed number of digits,
+  generally represented by a sign bit; a significand (also called the
+  ``coefficient'' and less often the ``mantissa''); and a scaling base and
+  exponent. See IEEE 754. For the purposes of this specification, it \shall be
+  understood that the result of an arithmetic operation in which one of the
+  operands is a floating point number may not be able to be represented exactly
+  in its binary representation, which may result in precision errors. These
+  errors may cause problems with rounding operations.
+
+  \dt{function}
+  A re-usable block of code that accepts input via parameters (if any) and
+  returns some value.
+
+  \dt{host environment}
+  The runtime environment.
+
+  \dt{integer}
+  A datatype; for the purposes of this specification, any signed whole number
+  $\{\ldots, -2, -1, 0, 1, 2, \ldots\}$ that may fit into a single machine word
+  (usually the size of a general-purpose register on the host architecture). On
+  32-bit two's-compliment machines, this value ranges from
+  $2,147,483,648--2,147,483,647$. An implementation \shall support at least
+  4-byte (at least 32-bit) integers and \shall not expect that any greater size
+  is available for calculations, but may make use of additional integer sizes
+  for other uses so long as such does not impact the final result of any
+  calculations.
+
+  \dt{memory}
+  Physical or virtual; used to store and retrieve data outside of CPU registers.
+
+  \dt{parameter}
+  A value accepted by a function.
+
+  \dt{procedure}
+  Similar to a function, but does not return any value; implies side-effects.
+
+  \dt{runtime}
+  Occurs during the execution of the program.
+
+  \dt{scalar}
+  A datum that is not an array.
+
+  \dt{side-effect}
+  Non-local data that is altered as a consequence of applying a function or
+  calling a procedure.
+
+  \dt{Software}
+  The result of implementing, through the use of machine code or a programming
+  language, this specification.
+
+  \dt{string}
+  A finite sequence of symbols---often bytes. When used on its own,
+  traditionally implies a ``character string''---that is, a string of character
+  values.
+
+  \dt{type}
+  Within the context of data, see ``data type''.
+\end{description}
