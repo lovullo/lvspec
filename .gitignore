@@ -5,5 +5,11 @@
 *.toc
 *.blg
 *.out
+
+# index
+*.idx
+*.ilg
+*.ind
+
 # generated
 verstr.tex
