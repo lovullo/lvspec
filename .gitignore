@@ -11,6 +11,11 @@
 *.ilg
 *.ind
 
+# minitoc
+*.maf
+*.mtc*
+*.ptc
+
 # generated
 verstr.tex
 isoterr.tex
