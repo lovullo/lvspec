@@ -10,11 +10,13 @@
 *.idx
 *.ilg
 *.ind
+*.lof
 
 # minitoc
 *.maf
 *.mtc*
 *.ptc
+*.mlf*
 
 # generated
 verstr.tex
