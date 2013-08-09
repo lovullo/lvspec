@@ -10,12 +10,14 @@
 *.idx
 *.ilg
 *.ind
+*.lot
 *.lof
 
 # minitoc
 *.maf
 *.mtc*
 *.ptc
+*.mlt*
 *.mlf*
 
 # generated
