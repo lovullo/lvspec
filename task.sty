@@ -1,0 +1,75 @@
+% Task environment
+
+\newcommand\taskname{Requisite}
+
+\newcounter{taskc}
+\setcounter{taskc}{0}
+\renewcommand\thetaskc{\Roman{taskc}}
+
+\newcounter{subtaskc}[taskc]
+\setcounter{subtaskc}{0}
+\renewcommand\thesubtaskc{%
+  \thetaskc\thesubtaskc@part
+}
+\def\thesubtaskc@part{%
+  \expandafter\ifnum\value{subtaskc}>0
+    -\alph{subtaskc}%
+  \fi
+}
+
+\newlength\taskspace
+
+\newenvironment{task}[1][]%
+  {%
+    \setlength\taskspace{2ex}%
+    \refstepcounter{taskc}%
+    \begin{@task}[#1]%
+  }%
+  {\end{@task}\ignorespaces}
+
+
+\newenvironment{subtask}[1][]%
+  {%
+    \list{}{%
+      \leftmargin4ex
+      \item\relax
+    }%
+    \setlength\taskspace{6ex}%
+    \refstepcounter{subtaskc}%
+    \begin{@task}[#1]%
+  }%
+  {%
+    \end{@task}%
+    \endlist
+    \ignorespaces
+  }
+
+
+
+\newlength\@@subtaskcl
+\newenvironment{@task}[1][]%
+  {%
+    \def\@@h{#1}%
+    \goodbreak\leavevmode\@margin@sig
+    \llap{%
+      \raisebox{-\baselineskip}[0em][0em]{%
+        \shortstack{%
+          {\sc\taskname}\space\thesubtaskc
+          \\
+          \vphantom{M}%
+          \ifx\@@h\empty\else
+            {\small\@task@h#1||\,h}%
+          \fi%
+        }%
+        \hspace{\the\taskspace}%
+        % adjust width of the subtask text so that the task number lines up
+        \settowidth\@@subtaskcl{\thesubtaskc@part}%
+        \hspace{-\the\@@subtaskcl}%
+      }%
+    }%
+    \ignorespaces
+  }%
+  {\goodbreak\ignorespaces}
+
+
+\def\@task@h#1-#2||{#1--#2}
