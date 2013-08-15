@@ -47,18 +47,25 @@
 
 
 \newlength\@@subtaskcl
+\newcount\@@hmin \newcount\@@hmax \newcount\@@hdiff \newcount\@@hconf
 \newenvironment{@task}[1][]%
   {%
     \def\@@h{#1}%
     \goodbreak\leavevmode\@margin@sig
     \llap{%
-      \raisebox{-\baselineskip}[0em][0em]{%
+      \raisebox{-1.8\baselineskip}[0em][0em]{%
         \shortstack{%
           {\sc\taskname}\space\thesubtaskc
           \\
           \vphantom{M}%
           \ifx\@@h\empty\else
             {\small\@task@h#1||\,h}%
+          \fi%
+          \\
+          \vphantom{M}%
+          \ifx\@@h\empty\else
+            \@task@setregs#1||%
+            {\scriptsize \the\@@hconf\% Confidence}%
           \fi%
         }%
         \hspace{\the\taskspace}%
@@ -73,3 +80,15 @@
 
 
 \def\@task@h#1-#2||{#1--#2}
+\def\@task@setregs#1-#2||{%
+  \@@hmin#1\relax
+  \@@hmax#2\relax
+  % perform calculation (be sure to multiply by 100 before dividing, otherwise
+  % we lose everything through integer truncation); the calculation is:
+  % 100 - ((|N-M|/M)*100)
+  \@@hdiff#2\relax \advance\@@hdiff-#1\relax
+  \@@hconf\@@hdiff
+  \multiply\@@hconf by 100\relax
+  \divide\@@hconf by-\@@hmax
+  \advance\@@hconf by 100\relax
+}
