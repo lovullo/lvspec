@@ -11,6 +11,10 @@
 \setcounter{taskc}{0}
 \renewcommand\thetaskc{\Roman{taskc}}
 
+% stores the total low and high until reset
+\newcounter{tasktmin}
+\newcounter{tasktmax}
+
 \newcounter{subtaskc}[taskc]
 \setcounter{subtaskc}{0}
 \renewcommand\thesubtaskc{%
@@ -86,6 +90,9 @@
           \ifx\@@h\empty\else
             \@task@setregs#1||%
             {\scriptsize \the\@@hconf\% Confidence}%
+            % advance the total counters
+            \addtocounter{tasktmin}{\@@hmin}
+            \addtocounter{tasktmax}{\@@hmax}
           \fi%
         }%
         \hspace{\the\taskspace}%
@@ -112,3 +119,18 @@
   \divide\@@hconf by-\@@hmax
   \advance\@@hconf by 100\relax
 }
+
+
+\newcommand\tasksummary{{%
+  \subsection{Summary}
+  \pnumoff
+  \edef\@@range{\arabic{tasktmin}-\arabic{tasktmax}}%
+  \par {\sc Time Interval:} \expandafter\@task@h\@@range|| Hours%
+  % determine confidence
+  \expandafter\@task@setregs\@@range||%
+  \par {\sc Confidence:} \the\@@hconf\%%
+  % reset counters
+  \setcounter{tasktmin}{0}%
+  \setcounter{tasktmax}{0}%
+  \pnumrest
+}}
