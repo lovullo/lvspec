@@ -19,17 +19,33 @@
 
 \newlength\taskspace
 
+\newlength\@@task@barwidth
+\setlength\@@task@barwidth\textwidth
+\addtolength\@@task@barwidth\marginparwidth
+\addtolength\@@task@barwidth\marginparsep
 \newenvironment{task}[1][]%
   {%
+    \goodbreak
     \setlength\taskspace{2ex}%
     \refstepcounter{taskc}%
+    \vspace{-0.5\parskip}%
+    \leavevmode\llap{\rule{\marginparwidth}{2pt}}%
+    \rule{\textwidth}{2pt}%
+    \vspace{-0.5\baselineskip}%
     \begin{@task}[#1]%
   }%
-  {\end{@task}\ignorespaces}
+  {%
+    \end{@task}%
+    \vspace{-0.85\baselineskip}%
+    \leavevmode\llap{\rule{\marginparwidth}{1pt}}%
+    \rule{\textwidth}{1pt}%
+    \ignorespaces
+  }
 
 
 \newenvironment{subtask}[1][]%
   {%
+    \goodbreak
     \list{}{%
       \leftmargin4ex
       \item\relax
