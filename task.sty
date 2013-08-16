@@ -127,7 +127,7 @@
 }
 
 
-\newcommand\tasksummary{{%
+\newcommand\tasksummary[1][]{{%
   \subsection{Summary}
   \pnumoff
   \edef\@@range{\arabic{tasktmin}-\arabic{tasktmax}}%
@@ -138,5 +138,10 @@
   % reset counters
   \setcounter{tasktmin}{0}%
   \setcounter{tasktmax}{0}%
+  % output any comments, if available
+  \def\@@comments{#1}%
+  \ifx\@@comments\empty\else
+    \par\@@comments
+  \fi
   \pnumrest
 }}
