@@ -15,6 +15,10 @@
 \newcounter{tasktmin}
 \newcounter{tasktmax}
 
+% added to after reset; all-encompassing time interval
+\newcounter{taskamin}
+\newcounter{taskamax}
+
 \newcounter{subtaskc}[taskc]
 \setcounter{subtaskc}{0}
 \renewcommand\thesubtaskc{%
@@ -71,7 +75,8 @@
 
 
 \newlength\@@subtaskcl
-\newcount\@@hmin \newcount\@@hmax \newcount\@@hdiff \newcount\@@hconf
+\newcount\@@hmin \newcount\@@hmax \newcount\@@hdiff
+\newcount\@@hconf \newcount\@@hvari
 \newenvironment{@task}[1][]%
   {%
     \def\@@h{#1}%
@@ -126,6 +131,17 @@
   \advance\@@hconf by 100\relax
 }
 
+% for variability
+\def\@task@setregs@vari#1-#2||{%
+  \@@hmin#1\relax
+  \@@hmax#2\relax
+  % ((|N-M|/N)*100)
+  \@@hdiff#2\relax \advance\@@hdiff-#1\relax
+  \@@hvari\@@hdiff
+  \multiply\@@hvari by 100\relax
+  \divide\@@hvari by \@@hmin
+}
+
 
 \newcommand\tasksummary[1][]{{%
   \subsection{Summary}
@@ -134,8 +150,12 @@
   \par {\sc Time Interval:} \expandafter\@task@h\@@range|| Hours%
   % determine confidence
   \expandafter\@task@setregs\@@range||%
+  \expandafter\@task@setregs@vari\@@range||%
   \par {\sc Confidence:} \the\@@hconf\%%
+  \par {\sc Variability:} \the\@@hvari\%%
   % reset counters
+  \addtocounter{taskamin}{\value{tasktmin}}%
+  \addtocounter{taskamax}{\value{tasktmax}}%
   \setcounter{tasktmin}{0}%
   \setcounter{tasktmax}{0}%
   % output any comments, if available
@@ -143,5 +163,23 @@
   \ifx\@@comments\empty\else
     \par\@@comments
   \fi
+  \pnumrest
+}}
+
+
+\newcommand\projectsummary{{%
+  \section{Project Summary}
+  \pnumoff
+  \edef\@@range{\arabic{taskamin}-\arabic{taskamax}}%
+  \par {\sc Non-Overlapping Time Interval:}%
+  \space\expandafter\@task@h\@@range|| Man Hours%
+  % determine confidence
+  \expandafter\@task@setregs\@@range||%
+  \expandafter\@task@setregs@vari\@@range||%
+  \par {\sc Confidence:} \the\@@hconf\%%
+  \par {\sc Variability:} \the\@@hvari\%%
+  % reset counters
+  \setcounter{taskamin}{0}%
+  \setcounter{taskamax}{0}%
   \pnumrest
 }}
