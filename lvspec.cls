@@ -58,7 +58,14 @@
 \setcounter{secnumdepth}{4}
 
 % the version string is taken directly from a file written by the build process
-\def\@verstr{{\footnotesize\tt\input{verstr.tex}}}
+\def\@verstr{{%
+  \footnotesize\tt
+  % if verstr.tex exists, then use that as the version string; otherwise, fall
+  % back to the current date
+  \IfFileExists{verstr.tex}%
+    {\input{verstr.tex}}%
+    {\number\year-\number\month-\number\day}%
+}}
 
 \def\@oddhead{\small\sc\rightmark\hfill TODO}
 \let\@evenhead\@oddhead
