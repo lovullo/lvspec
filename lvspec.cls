@@ -2,15 +2,17 @@
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{lvspec}
-\RequirePackage{kvoptions}
-\RequirePackage{kvoptions-patch}
 
-\DeclareBoolOption{bw}
+\newif\iflvspec@draft
+\newif\iflvspec@bw
+
+\DeclareOption{draft}{\global\lvspec@drafttrue}
+\DeclareOption{bw}{\global\lvspec@bwtrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrreprt}}
 \ProcessOptions\relax
 
-% base class
-\LoadClass{scrreprt}
+% base class, defaulting to 10pt
+\LoadClass[10pt]{scrreprt}
 
 \RequirePackage[top=3.5cm,bottom=5cm,width=\textwidth]{geometry}
 \RequirePackage{makeidx}
@@ -96,6 +98,19 @@
 \makeindex
 \dominitoc \dominilot \dominilof
 
+\let\@title@orig\title
+\renewcommand\title[2][]{{%
+  \def\@@short{#1}%
+  \@title@orig{#2}%
+  % use the full title if no short title is provided
+  \ifx\@@short\empty
+    \gdef\@title@short{#2}%
+  \else
+    \gdef\@title@short{#1}%
+  \fi
+}}
+
+
 
 %%
 % Paragraph numbering and example environment
@@ -109,9 +124,9 @@
 \def\pnum{{%
   % never show paragraph numbers within an environment (LaTeX stores the name of
   % the current environment in @currenvir)
-  \def\@@document{dwspec}%
+  \def\@@document{document}%
   \def\@@premcalc{premcalc}%
-  % allow dwspec by default
+  % allow document by default
   \let\@@cmp\@currenvir
   % allow premcalc env
   \ifx\@currenvir\@@premcalc
@@ -133,7 +148,7 @@
 % margin area for paragraph signatures (initials)
 \def\@margin@sig{%
   % if in draft mode, add a spot next to the paragraph for initials
-  \ifdwspec@draft%
+  \iflvspec@draft%
     \pnumoff%
     \marginpar{%
       \ifx\@@margin@sig@repl\empty%
@@ -141,7 +156,7 @@
         \underline{\hspace{3em}}%
         \ifx\@@margin@sig@dept\relax
           % one needs to be assigned
-          \PackageWarning{dwspec}{missing authorization party in%
+          \PackageWarning{lvspec}{missing authorization party in%
             \space\thechapter.\thesection}%
         \else
           \space{\scriptsize(\@@margin@sig@dept)}%
@@ -494,3 +509,115 @@
 % Hyphenation
 %
 \hyphenation{Concept-One}
+
+
+
+%%
+% Begin common content
+%
+\let\@lvspec@terminology\empty
+\let\@lvspec@abstract\empty
+
+% allows us to use the abstract command whilst still using the environment
+\let\@abstract\abstract
+\let\end@abstract\endabstract
+
+\renewcommand\abstract[1]{%
+  \gdef\@lvspec@abstract{#1}%
+}
+\newcommand\terminology[1]{%
+  \gdef\@lvspec@terminology{#1}%
+}
+
+\renewcommand\maketitle{%
+  \begin{titlepage}
+    \begin{center}
+      % left and right borders
+      \llap{\rule{6pt}{\textheight}\hspace{4em}}
+      \marginpar{\hspace{4em}\rule{6pt}{\textheight}}
+      % content
+      \begingroup
+        \vspace{-\textheight}
+        \sc\Huge
+        \@lvspec@pretitle
+        \@title
+        \\
+        % indicate drafts
+        \iflvspec@draft
+          \vspace{2em}%
+          (Working Draft)\\
+        \fi
+      \endgroup
+      \vspace{5em}%
+      \begingroup
+        \Large
+        \@author\\LoVullo Associates\\
+        \vspace{2em}%
+        \vfill
+        \today
+      \endgroup
+    \end{center}
+  \end{titlepage}
+
+  \begin{@abstract}
+    \@lvspec@abstract
+    \iflvspec@draft
+      \par
+      \emph{This specification is currently under development;} please direct
+      any questions to the appropriate party as shown in \sref{authorize}.
+    \fi
+
+    \vfill\raggedleft
+    \begingroup
+      \small
+      Copyright \copyright\ 2013 LoVullo Associates, Inc.\\
+      This document was generated on \today.\\
+      Version identifier: \@verstr
+    \endgroup
+  \end{@abstract}
+
+  \dominitoc \dominilot \dominilof
+  \tableofcontents \listoftables \listoffigures
+  \newpage
+
+  % enable paragraph numbering
+  \pnumon\@hgrab
+
+  \section{Definitions}
+  \label{s:dfns}
+  \sectiondept{pm}
+  The definitions in this section \shall supersede any other uses of these terms,
+  regardless of their common use in the insurance industry or elsewhere.
+
+  Multiple terms that share the same definition will be delimited with semicolons.
+
+  \subsection{Specification Terminology}
+  \input{dfn/spec}
+
+  % include any custom terminology
+  \@lvspec@terminology
+
+  \subsection{Developer Terminology}
+  \input{dfn/dev}
+
+  % signatures apply only to draft mode (we place this at the end of the other
+  % subsections so that the section numbering will not change between the two
+  % modes)
+  \iflvspec@draft
+    \subsection{Authorization Parties}
+    \input{dfn/authparty}
+  \fi
+}
+
+\AtEndDocument{%
+  \pnumoff\@hrestore
+  \bibliographystyle{plain}
+  \renewcommand{\bibname}{References}
+  \bibliography{common}
+  \begingroup
+    \markright{Index}
+    \small
+    \catcode`_=11\relax% due to allowing underscores as letters previously
+    \printindex
+  \endgroup
+}
