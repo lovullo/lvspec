@@ -24,6 +24,7 @@
 \RequirePackage{varioref}
 \RequirePackage{amsmath}
 \RequirePackage{multirow}
+\RequirePackage{task}
 
 % default hyperlink color
 \definecolor{hyperlink}{HTML}{000040}
