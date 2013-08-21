@@ -513,6 +513,24 @@
   \fi%
 }
 
+% prepares for idxhat to be enabled, at some point
+\let\@hat^
+\begingroup
+  \catcode`\^=\active
+  \global\let^\@idxhat
+\endgroup
+
+% allow use of ^ (hat) as short-hand for adding entries to the index (inspired
+% by Knuth's convention, mentioned in TeXbook)
+\newcommand\idxhaton{%
+  % allow ^ to be used as a command
+  \global\catcode`\^=\active
+}
+\newcommand\idxhatoff{%
+  % restore to normal
+  \global\catcode`\^=7\relax
+}
+
 
 %%
 % Hyphenation
@@ -592,6 +610,7 @@
 
   % enable paragraph numbering
   \pnumon\@hgrab
+  \idxhaton
 
   \section{Definitions}
   \label{s:dfns}
