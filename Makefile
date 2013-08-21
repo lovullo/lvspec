@@ -14,7 +14,7 @@ default: lvspec.pdf
 # outputs a version string to uniquely identify the document revision
 # TODO: use tag name if matches current commit
 verstr.tex:
-	verstr >$@
+	./verstr >$@
 
 clean:
 	rm -f *.pdf

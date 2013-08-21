@@ -5,9 +5,11 @@
 
 \newif\iflvspec@draft
 \newif\iflvspec@bw
+\newif\iflvspec@term@ins
 
 \DeclareOption{draft}{\global\lvspec@drafttrue}
 \DeclareOption{bw}{\global\lvspec@bwtrue}
+\DeclareOption{insuranceterms}{\global\lvspec@term@instrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrreprt}}
 \ProcessOptions\relax
 
@@ -624,11 +626,16 @@
   \subsection{Specification Terminology}
   \input{dfn/spec}
 
-  % include any custom terminology
-  \@lvspec@terminology
-
   \subsection{Developer Terminology}
   \input{dfn/dev}
+
+  \iflvspec@term@ins
+    \subsection{Insurance Terminology}
+    \input{dfn/ins}
+  \fi
+
+  % include any custom terminology
+  \@lvspec@terminology
 
   % signatures apply only to draft mode (we place this at the end of the other
   % subsections so that the section numbering will not change between the two
