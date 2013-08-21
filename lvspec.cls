@@ -23,6 +23,7 @@
 \RequirePackage{url}
 \RequirePackage{varioref}
 \RequirePackage{amsmath}
+\RequirePackage{amssymb}
 \RequirePackage{multirow}
 \RequirePackage{task}
 
