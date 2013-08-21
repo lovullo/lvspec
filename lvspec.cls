@@ -67,7 +67,8 @@
     {\number\year-\number\month-\number\day}%
 }}
 
-\def\@oddhead{\small\sc\rightmark\hfill TODO}
+\let\@lvspec@premarktitle\relax
+\def\@oddhead{\small\sc\rightmark\hfill\@lvspec@premarktitle\@title@short}
 \let\@evenhead\@oddhead
 \def\@oddfoot{\S\thefullsection\hfill\thepage\hfill\@verstr}
 \let\@evenfoot\@oddfoot
@@ -522,8 +523,9 @@
 %%
 % Begin common content
 %
-\let\@lvspec@terminology\empty
-\let\@lvspec@abstract\empty
+\let\@lvspec@terminology\relax
+\let\@lvspec@abstract\relax
+\let\@lvspec@pretitle\relax
 
 % allows us to use the abstract command whilst still using the environment
 \let\@abstract\abstract
