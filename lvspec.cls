@@ -92,8 +92,9 @@
 \def\minitocoff{\gdef\minitoc{}}
 \def\minitocon{\global\let\minitoc\@minitoc@orig}
 
-% enable index generation
+% enable index generation and minis
 \makeindex
+\dominitoc \dominilot \dominilof
 
 
 %%
