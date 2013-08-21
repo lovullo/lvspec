@@ -14,9 +14,7 @@ default: lvspec.pdf
 # outputs a version string to uniquely identify the document revision
 # TODO: use tag name if matches current commit
 verstr.tex:
-	git log -n1 --format=%h | tr -d '\n' > verstr.tex
-	test -z "$$( git status -s | grep -v '^?? ' )" \
-		|| echo -n '-dirty' >> verstr.tex
+	verstr >$@
 
 clean:
 	rm -f *.pdf

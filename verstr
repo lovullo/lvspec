@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# Generates version string
+
+# output current shortref
+git log -n1 --format=%h | tr -d '\n'
+
+# if we have uncommitted changes, then append with -dirty
+test -z "$$( git status -s | grep -v '^?? ' )" \
+  || echo -n '-dirty'
