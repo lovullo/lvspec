@@ -548,6 +548,7 @@
 \let\@lvspec@terminology\relax
 \let\@lvspec@abstract\relax
 \let\@lvspec@pretitle\relax
+\let\@lvspec@titlecmd\relax
 
 % allows us to use the abstract command whilst still using the environment
 \let\@abstract\abstract
@@ -585,6 +586,7 @@
         \@author\\LoVullo Associates\\
         \vspace{2em}%
         \vfill
+        \@lvspec@titlecmd
         \today
       \endgroup
     \end{center}

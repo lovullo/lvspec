@@ -2,8 +2,16 @@
 %
 % Yep.
 
-\documentclass[draft]{lvspec}
+\documentclass{lvspec}
 \usepackage{multicol}
+\usepackage{graphicx}
+
+\makeatletter
+  \def\@lvspec@titlecmd{%
+    \includegraphics[scale=0.5]{images/dilbert-time.png}
+    \vfill
+  }%
+\makeatother
 
 \begin{document}
   \title{LoVullo Specification Specifications}
