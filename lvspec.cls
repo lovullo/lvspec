@@ -484,7 +484,10 @@
 % denotes incomplete sections/paragraphs
 \def\@incomplete@default{{\small\bf Incomplete.}}
 \def\incomplete{%
-  \gdef\@@margin@sig@repl{\@incomplete@default}%
+  \gdef\@@margin@sig@repl{%
+    \index{Incomplete@\textbf{Incomplete}}%
+    \@incomplete@default
+  }%
 }
 \def\incompletei{%
   \gdef\@@margin@sig@repl{%
@@ -497,6 +500,7 @@
         % clear the department, if necessary
         \@margin@sig@cleardept
       \fi
+      \index{Incomplete@\textbf{Incomplete}!\@@margin@sig@dept}%
       .)%
     \endgroup
   }%
