@@ -164,6 +164,8 @@ version identifier that is either taken from \path{verstr.tex} or---if
 unavailable---the current date.\footnote{See \path{lvspec.git/Makefile} for an
 example of how to use \path{verstr.tex}.}
 
+Section numbers are enabled for sub-subsections.
+
 
 \subsection{Title Page and Abstract}
 The title is typeset in {\sc Small Caps} to provide stronger emphasis than a
@@ -381,6 +383,74 @@ undefined terms.
   \includegraphics[width=0.7\textwidth]{images/period_speech.png}
 \end{center}
 \pnumon
+
+
+\section{Table of Contents, Index and Bibliography}
+A table of contents will be output after the title and abstract pages and will
+include up to sub-subsections in depth. Furthermore, a mini table of contents
+will be output after every chapter heading.
+
+If a chapter contains figures or tables, then a list of figures and/or~a list of
+tables will be output, respectively, after the mini table of contents.
+
+A bibliography will be output if the~\verb|\cite| command is used at least once.
+By default, the file~\path{common.bib} will be used.
+
+\subsection{Index}
+A well-structured and complete index is considered to be a sign of an organized
+and well-authored work. You should pay attention to your index, as it helps
+people find things, even if searching is available (e.g. in PDF~form).
+
+An index will be output at the end of the document. Certain commands
+(e.g.~\verb|\dfn|) add to the index automatically, but other entries must be
+manually added throughout the text using \verb|\index|.
+
+\begin{ex}
+  \begin{verbatim}
+This paragraph is about \index{animals!cats}cats.
+
+\section{Cats}
+\index{animals!cats|(}
+% ...
+This whole section is about cats!
+% ...
+\index{animals!cats|)}
+
+This section is \emph{not} about cats.
+  \end{verbatim}
+\end{ex}
+
+The command \verb|\dfn| accepts a more primitive index syntax (supporting~`!'),
+formats the command as a~\dfn{definition}, and displays the text after the
+rightmost~`!', or the entire text if no such character exists.
+
+\begin{ex}
+  \begin{verbatim}
+% the following two paragraphs are equivalent
+This paragraph is about \index{animals!cats}cats.
+
+% the only difference is that ``cats'' is styled in this paragraph, but not
+% above
+This paragraph is about \dfn{animals!cats}.
+  \end{verbatim}
+\end{ex}
+
+A limited short-hand notation, inspired by Knuth's \TeX{}book, is also
+available: The `\^{}' character has been re-mapped as a command and will take
+the word that follows it and place it into the index (in addition to typesetting
+it). If the word contains spaces, then it may be enclosed in brackets. The
+`\^{}' character retains it original meaning within math mode (e.g. $4\pi r^2$).
+
+\begin{ex}
+  \begin{verbatim}
+In this paragraph, ``^word'' is placed into the index, as well as ``^[multiple
+words]''.
+
+The `\^{}' character retains it original meaning within math mode
+(e.g. $4\pi r^2$).
+  \end{verbatim}
+\end{ex}
+
 
 \section{Miscellaneous}
 % text has been carefully added to this line; margin, font, etc changes will
