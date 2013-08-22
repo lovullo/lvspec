@@ -186,6 +186,9 @@
           \PackageWarning{lvspec}{missing authorization party in%
             \space\thechapter.\thesection}%
         \else
+          \index{Needs Authorization@\textbf{Needs Authorization}!%
+            \@@margin@sig@dept
+          }%
           \space{\scriptsize(\@@margin@sig@dept)}%
           % clear the department, if necessary
           \@margin@sig@cleardept
