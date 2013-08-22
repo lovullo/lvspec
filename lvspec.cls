@@ -7,7 +7,10 @@
 \newif\iflvspec@bw
 \newif\iflvspec@term@dev \newif\iflvspec@term@ins
 
-\DeclareOption{draft}{\global\lvspec@drafttrue}
+\DeclareOption{draft}{%
+  \global\lvspec@drafttrue
+  \PassOptionsToClass{\CurrentOption}{scrreprt}%
+}
 \DeclareOption{bw}{\global\lvspec@bwtrue}
 \DeclareOption{devterms}{\global\lvspec@term@devtrue}
 \DeclareOption{insuranceterms}{\global\lvspec@term@instrue}
