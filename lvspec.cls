@@ -5,10 +5,11 @@
 
 \newif\iflvspec@draft
 \newif\iflvspec@bw
-\newif\iflvspec@term@ins
+\newif\iflvspec@term@dev \newif\iflvspec@term@ins
 
 \DeclareOption{draft}{\global\lvspec@drafttrue}
 \DeclareOption{bw}{\global\lvspec@bwtrue}
+\DeclareOption{devterms}{\global\lvspec@term@devtrue}
 \DeclareOption{insuranceterms}{\global\lvspec@term@instrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrreprt}}
 \ProcessOptions\relax
@@ -547,6 +548,7 @@
 % Begin common content
 %
 \let\@lvspec@terminology\relax
+\let\@lvspec@insterminology\relax
 \let\@lvspec@abstract\relax
 \let\@lvspec@pretitle\relax
 \let\@lvspec@titlecontent\relax
@@ -564,6 +566,12 @@
 \newcommand\terminology[1]{%
   \gdef\@lvspec@terminology{#1}%
 }
+
+\iflvspec@term@ins
+  \newcommand\insuranceterminology[1]{%
+    \gdef\@lvspec@insterminology{#1}%
+  }
+\fi
 
 \renewcommand\maketitle{%
   \begin{titlepage}
@@ -632,12 +640,16 @@
   \subsection{Specification Terminology}
   \input{dfn/spec}
 
-  \subsection{Developer Terminology}
-  \input{dfn/dev}
+  \iflvspec@term@dev
+    \subsection{Developer Terminology}
+    \input{dfn/dev}
+  \fi
 
   \iflvspec@term@ins
     \subsection{Insurance Terminology}
     \input{dfn/ins}
+    % add any additional insurance terminology, if any
+    \@lvspec@insterminology
   \fi
 
   % include any custom terminology
