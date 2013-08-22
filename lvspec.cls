@@ -633,7 +633,7 @@
   \end{@abstract}
 
   \dominitoc \dominilot \dominilof
-  \tableofcontents \listoftables \listoffigures
+  \tableofcontents
   \newpage
 
   % enable paragraph numbering
