@@ -643,6 +643,7 @@
   % subsections so that the section numbering will not change between the two
   % modes)
   \iflvspec@draft
+    \phantomsection% correct hyperref issue
     \subsection{Authorization Parties}
     \input{dfn/authparty}
   \fi
