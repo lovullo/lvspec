@@ -120,6 +120,9 @@ environment. All examples end with `$\square$'.
   % ...example here...
 \end{ex}
   \end{verbatim}
+
+  The extra vertical space is simply because of the \cmd{verbatim} environment
+  used for the above examples; \cmd{ex} itself does not add it, as shown here.
 \end{ex}
 
 
@@ -133,8 +136,6 @@ re-enabled using \verb|pnumon|\ldots
 \pnumon
 Numbers will continue where they previously left off before being suppressed.
 
-Disabling paragraph numbering also disables the signature line
-
 \begin{ex}
   \begin{verbatim}
 Paragraph numbering can be temporarily disabled using \verb|\pnumoff| and
@@ -145,6 +146,23 @@ re-enabled using \verb|pnumon|\ldots
 
 \pnumon
 Numbers will continue where they previously left off before being suppressed.
+  \end{verbatim}
+\end{ex}
+
+Disabling paragraph numbering also disables the signature line, since there is
+no longer any disambiguating identifier.
+
+\begin{itemize}
+  \item Paragraph numbering, by default, does not take effect inside any
+  environments.\footnote{Except for \cmd{document}.}
+\end{itemize}
+
+\begin{ex}
+  \begin{verbatim}
+\begin{itemize}
+  \item Paragraph numbering, by default, does not take effect inside any
+  environments.\footnote{Except for \cmd{document}.}
+\end{itemize}
   \end{verbatim}
 \end{ex}
 
