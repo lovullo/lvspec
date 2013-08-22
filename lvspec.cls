@@ -387,6 +387,7 @@
 \def\rfc#1{{\tt RFC #1}}
 \def\hex#1{{\tt 0x#1}}
 \def\code#1{{\tt#1}}
+\def\cmd{\path}
 \def\func#1{{\tt #1()}}
 \def\set#1{%
   \ifmmode%
