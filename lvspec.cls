@@ -549,12 +549,15 @@
 \let\@lvspec@terminology\relax
 \let\@lvspec@abstract\relax
 \let\@lvspec@pretitle\relax
-\let\@lvspec@titlecmd\relax
+\let\@lvspec@titlecontent\relax
 
 % allows us to use the abstract command whilst still using the environment
 \let\@abstract\abstract
 \let\end@abstract\endabstract
 
+\newcommand\titlecontent[1]{%
+  \gdef\@lvspec@titlecontent{#1}%
+}
 \renewcommand\abstract[1]{%
   \gdef\@lvspec@abstract{#1}%
 }
@@ -587,7 +590,7 @@
         \@author\\LoVullo Associates\\
         \vspace{2em}%
         \vfill
-        \@lvspec@titlecmd
+        \@lvspec@titlecontent
         \today
       \endgroup
     \end{center}

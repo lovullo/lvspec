@@ -7,15 +7,15 @@
 \usepackage[final]{graphicx}
 
 \makeatletter
-  \def\@lvspec@titlecmd{%
-    \includegraphics[scale=0.5]{images/dilbert-time.png}
-    \vfill
-  }%
 \makeatother
 
 \begin{document}
 \title{LoVullo Specification Specifications}
 \author{Mike Gerwitz}
+\titlecontent{%
+  \includegraphics[scale=0.5]{images/dilbert-time.png}
+  \vfill
+}%
 \abstract{%
   \setlength\columnsep{-5ex}%
   \begin{multicols}{2}
@@ -100,7 +100,7 @@ draft} mode will enable signature lines, as shown to the right.
 
 \begin{ex}
   \begin{verbatim}
-% omit "[draft]" to disable unapproved signature lines
+% omit "[draft]" to disable signature lines
 \documentclass[draft]{lvspec}
 
 % as is the case with all LaTeX documents, begin and end with document
@@ -126,7 +126,96 @@ environment. All examples end with `$\square$'.
 \end{ex}
 
 
-\section{Paragraph Numbering}
+\section{General Formatting}
+There are a number of formatting decisions that \cmd{lvspec} makes for you; you
+should \emph{not} override them manually, since the \cmd{lvspec}~class is
+intended to provide a company-wide abstraction that can be easily modified to
+apply to all specifications.
+
+The \cmd{lvspec}~class is based on the \cmd{scrreprt}~class, which is in turn
+very similar to the standard \LaTeX\ \cmd{report}~class. In particular, all
+section levels starting with \verb|\chapter| are supported and margins are of
+equal length on both sides, which is suitable for collating portions of the
+document without having to worry about binding and what side a particular page
+is printed on. Margins are large to provide plenty of space for annotations and
+reader markup. The default page size is US~letter.
+
+\cmd{lvspec} suppresses paragraph indentation and instead adds space between
+paragraphs, which is more natural with paragraph numbering (see~\sref{parnum}).
+
+The amount of text on a page is determined by a ratio that carefully balances
+characters per line and number of lines on a page according to established
+typesetting conventions and also takes into account Hermann~Zapf's ideas for
+page ``grayness'' (where a page appears darker with more text). Since
+\cmd{lvspec} adds additional whitespace between lines, it accommodates by
+decreasing the height of the top and~bottom page margins. Furthermore, glue
+between section headings has been condensed slightly and is not as stretchable.
+
+The header of each page contains the document title (short title if provided) in
+the upper-right hand corner, with the current section (as of the beginning of
+the page) on the upper-left. The typeface is in {\sc Small Caps} to distinguish
+it from the page body which is in fairly close proximity. The font size has also
+been {\small slightly decreased} to move focus away from it.
+
+\p{ex:footer}
+The footer of each page contains, from left to right, the section number of the
+last section to appear on the page; the current page number; and a unique
+version identifier that is either taken from \path{verstr.tex} or---if
+unavailable---the current date.\footnote{See \path{lvspec.git/Makefile} for an
+example of how to use \path{verstr.tex}.}
+
+
+\subsection{Title Page and Abstract}
+The title is typeset in {\sc Small Caps} to provide stronger emphasis than a
+normal typeface (because {\bf bold is too bold}).
+
+If the \cmd{draft} option is provided via \verb|\documentclass|, then the text
+``{\sc(Working Draft)}'' will be typeset below the title.
+
+The \verb|\title| command is modified to support an optional ``short title'' to
+be used primarily in the header to provide additional space for section names.
+
+The text ``{\sc LoVullo Associates}'' is added below any provided author(s).
+
+The date of document generation is typeset flush with the bottom of the page
+body.
+
+Two bold, vertical bars span the entire length of the page body in the left and
+right margins.
+
+Additional content may be added to the title page below the author and above the
+date by using the \verb|\titlecontent| command.
+
+An abstract may be typeset on the following page using the~\verb|\abstract|
+command. If the~\cmd{draft} option is provided, an additional paragraph will be
+added---regardless of whether an abstract was given---stating that the document
+is a draft.
+
+Flush with the bottom of the abstract page body is a copyright notice, date of
+page generation (the same date that appears on the title page) and the version
+identifier that appears on the footer of every page (as mentioned
+in~\pref{ex:footer}).
+
+\begin{ex}
+  \begin{verbatim}
+\begin{document}
+% optionally, use \title[Short Title]{Long Title}
+\title{LoVullo Specification Specifications}
+\author{Mike Gerwitz}
+\titlecontent{%
+  \includegraphics[scale=0.5]{images/dilbert-time.png}
+  \vfill
+}%
+\abstract{...}
+\maketitle
+% ...
+  \end{verbatim}
+\end{ex}
+
+Immediately after the title and~abstract pages are typeset, paragraph numbering
+(see~\sref{parnum}) and~signature lines (see~\sref{siglines}) are enabled.
+
+\section{Paragraph Numbering}\label{s:parnum}
 Paragraph numbering can be temporarily disabled using \verb|\pnumoff| and
 re-enabled using \verb|pnumon|\ldots
 
@@ -167,7 +256,7 @@ no longer any disambiguating identifier.
 \end{ex}
 
 
-\section{Signature Lines}
+\section{Signature Lines}\label{s:siglines}
 The department for the entire section can be set using the
 \verb|\sectiondept| command; the command takes effect until the next section
 or chapter.
@@ -244,6 +333,13 @@ command \verb|\incompletei|, which also includes the name of the department.
   \end{verbatim}
 \end{ex}
 
+
+\section{Miscellaneous}
+% text has been carefully added to this line; margin, font, etc changes will
+% ruin it!
+Proper hyphenation is added for ``ConceptOne'', as is shown here on this line:
+ConceptOne test.
+
 \enddeptgroup
 
 
@@ -273,4 +369,5 @@ $ pdftex src.tex \
 
 \noindent You may decide to omit \cmd{bibtex} if you are not using a
 bibliography (but you probably should cite your information and rationale).
+
 \end{document}
