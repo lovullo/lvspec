@@ -124,6 +124,17 @@
 }}
 
 
+% we'll output a bibliography if \cite is used
+\newif\iflvspec@bib
+\let\cite@orig\cite
+\def\cite{%
+  \global\lvspec@bibtrue
+  % restore original command and re-invoke
+  \global\let\cite\cite@orig
+  \cite
+}
+
+
 
 %%
 % Paragraph numbering and example environment
@@ -667,9 +678,12 @@
 
 \AtEndDocument{%
   \pnumoff\@hrestore
-  \bibliographystyle{plain}
-  \renewcommand{\bibname}{References}
-  \bibliography{common}
+  % only output bibliography if \cite was used
+  \iflvspec@bib
+    \bibliographystyle{plain}
+    \renewcommand{\bibname}{References}
+    \bibliography{common}
+  \fi
   \begingroup
     \markright{Index}
     \small
