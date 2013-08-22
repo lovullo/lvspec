@@ -334,6 +334,39 @@ command \verb|\incompletei|, which also includes the name of the department.
 \end{ex}
 
 
+\section{Definitions}
+The formal language of the specification is important to resolve any
+ambiguities; part of such a resolution involves the formal and unambiguous
+definition of terms.
+
+By default, \cmd{lvspec} will \emph{always} include specification definitions
+(see~\sref{specdfn}).
+
+When the~\cmd{draft} option is provided, a~section describing authorization
+parties will also be added, which is linked to by the department in each
+signature line.
+
+Additionally, the following options may be provided via~\verb|\documentclass|:
+
+\begin{description}
+  \item[\cmd{devterms}]
+  Comprehensive developer terminology that covers specifications that deal with
+  software and/or~hardware details.
+
+  \item[\cmd{insuranceterms}]
+  General insurance terminology to be used in any specification that describes
+  an insurance-related implementation. Additional content can be added
+  immediately after the terms (e.g. to add a sub-section) by using the command
+  \verb|\insuranceterminology|, which is only available if
+  the~\cmd{insuranceterms} option is used.
+\end{description}
+
+Additional sections can be added before\footnote{Ensures that section numbers do
+not change by disabling \cmd{draft} mode.} the authorization party sub-section
+(or, if the~\cmd{draft} option is not provided, then at the end of the
+definitions section) by using the \verb|\terminology| command.
+
+
 \section{Miscellaneous}
 % text has been carefully added to this line; margin, font, etc changes will
 % ruin it!
