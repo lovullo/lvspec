@@ -458,7 +458,8 @@
 }
 
 % refs
-\def\fref#1{Figure~\ref{f:#1} on page~\pageref{f:#1}}
+\def\fref#1{Figure~\vref{f:#1}}
+\def\frefnopg#1{Figure~\ref{f:#1}}
 \def\tref#1{Table~\ref{t:#1} on page~\pageref{t:#1}}
 \def\sref#1{\S\vref*{s:#1}}
 \def\srefnopg#1{\S\ref{s:#1}}
@@ -655,7 +656,7 @@
   \end{@abstract}
 
   \dominitoc \dominilot \dominilof
-  \tableofcontents
+  \tableofcontents \fakelistoftables \fakelistoffigures
   \newpage
 
   % enable paragraph numbering
