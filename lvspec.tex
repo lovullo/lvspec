@@ -476,20 +476,20 @@ This appendix is by no means comprehensive.
 \section{Generating PDF}
 A PDF can be generated from the~\TeX\ source files by issuing the command
 \cmd{pdflatex}; indexes are generated using the command \cmd{makeidx}; and
-bibliographies are generated using \cmd{bibtex}. First, \cmd{pdftex} must be run
-to determine the page numbers and gather all the references. Then, after each of
-the latter two commands are run, \cmd{pdftex} must be re-run in order to update
-the document. Since the act of updating the document may alter the references,
-it is recommended to run \cmd{pdftex} multiple times at the end:\footnote{See
-\path{lvspec.git/Makefile} for an example.}
+bibliographies are generated using \cmd{bibtex}. First, \cmd{pdflatex} must be
+run to determine the page numbers and gather all the references. Then, after
+each of the latter two commands are run, \cmd{pdflatex} must be re-run in order
+to update the document. Since the act of updating the document may alter the
+references, it is recommended to run \cmd{pdflatex} multiple times at the
+end:\footnote{See \path{lvspec.git/Makefile} for an example.}
 
 \begin{ex}
   \begin{verbatim}
-$ pdftex src.tex \
+$ pdflatex src.tex \
 > && bibtex src.tex \
 > && makeindex src \
-> && pdftex src.tex \
-> && pdftex src.tex
+> && pdflatex src.tex \
+> && pdflatex src.tex
   \end{verbatim}
 \end{ex}
 
