@@ -416,6 +416,10 @@
   \fi%
 }
 
+% enough space for a number (all numbers are the same width, so this works well
+% for quick-n-dirty alignment)
+\newcommand\z{\phantom{0}}
+
 % non-technical-reader-friendly if not in math mode
 \def\true{\ifmmode\top\else Yes\fi}
 \def\false{\ifmmode\bot\else No\fi}
