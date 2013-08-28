@@ -1,0 +1,43 @@
+#!/bin/bash
+
+src="${1?Missing source document}"
+
+domake()
+{
+  pdflatex -draftmode "$src" >&2
+}
+
+gendate()
+{
+  echo -n "$( git log -n1 --pretty=format:%ai | cut -d' ' -f1 ) "
+}
+
+domake \
+  && echo -n 'id ' \
+  && head -n1 taskstats.dat \
+  && \
+  (
+    gendate && tail -n1 taskstats.dat \
+    && git log --first-parent --no-merges --pretty=format:'%ar %h' \
+    | awk '
+      BEGIN {
+        last=""
+      }
+
+      /days ago/{
+        if ( $1 == last ) next;
+        if ( $1 < last ) nextfile;
+        last = $1;
+        print $1, $NF;
+      }
+    ' \
+    | while read n h; do
+      git checkout "$h" >&2 \
+        && domake \
+        && gendate \
+        && tail -n1 taskstats.dat \
+        || exit 1
+    done
+  ) \
+  | tac \
+  | awk 'BEGIN{i=0}{i++; printf "%d ", i; print}'

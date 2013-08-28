@@ -168,6 +168,7 @@
 }}
 
 
+\newwrite\@taskstats
 \newcommand\projectsummary{{%
   \section{Project Summary}
   \pnumoff
@@ -179,6 +180,21 @@
   \expandafter\@task@setregs@vari\@@range||%
   \par {\sc Confidence:} \the\@@hconf\%%
   \par {\sc Variability:} \the\@@hvari\%%
+  % calculate median
+  \newcount\@@med
+  \advance\@@med \value{taskamin}%
+  \advance\@@med \value{taskamax}%
+  \divide\@@med by 2\relax
+  % write task stats to file (can be used for reporting by building consecutive
+  % versions, concatenating the data, taking the last row for each date and
+  % plotting, for example)
+  \immediate\openout\@taskstats=taskstats.dat
+  \immediate\write\@taskstats{min max med cp vp}%
+  \immediate\write\@taskstats{%
+    \arabic{taskamin} \arabic{taskamax} \the\@@med
+    \space\the\@@hconf \space\the\@@hvari
+  }%
+  \immediate\closeout\@taskstats
   % reset counters
   \setcounter{taskamin}{0}%
   \setcounter{taskamax}{0}%
