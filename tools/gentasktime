@@ -17,7 +17,7 @@ domake \
   && head -n1 taskstats.dat \
   && \
   (
-    gendate && tail -n1 taskstats.dat \
+    echo -n '0 ' && gendate && tail -n1 taskstats.dat \
     && git log --first-parent --no-merges --pretty=format:'%ar %h' \
     | awk '
       BEGIN {
@@ -34,10 +34,9 @@ domake \
     | while read n h; do
       git checkout "$h" >&2 \
         && domake \
+        && echo -n "-$n " \
         && gendate \
         && tail -n1 taskstats.dat \
         || exit 1
     done
-  ) \
-  | tac \
-  | awk 'BEGIN{i=0}{i++; printf "%d ", i; print}'
+  )
