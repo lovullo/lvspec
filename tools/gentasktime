@@ -1,6 +1,7 @@
 #!/bin/bash
 
 src="${1?Missing source document}"
+path="${2?Missing spec src path}"
 
 domake()
 {
@@ -18,7 +19,7 @@ domake \
   && \
   (
     echo -n '0 ' && gendate && tail -n1 taskstats.dat \
-    && git log --first-parent --no-merges --pretty=format:'%ar %h' \
+    && git log --no-merges --pretty=format:'%ar %h' -- "$path" \
     | awk '
       BEGIN {
         last=""
