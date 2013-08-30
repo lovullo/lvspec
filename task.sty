@@ -88,6 +88,7 @@
     \goodbreak\leavevmode\@margin@sig
     % enable overlap command
     \let\overlap\@task@overlap
+    \let\complete\@task@complete
     % typeset
     \llap{%
       \raisebox{-1.8\baselineskip}[0em][0em]{%
@@ -104,8 +105,8 @@
             \@task@setregs#1||%
             {\scriptsize \the\@@hconf\% Confidence}%
             % advance the total counters
-            \addtocounter{tasktmin}{\@@hmin}
-            \addtocounter{tasktmax}{\@@hmax}
+            \addtocounter{tasktmin}{\@@hmin}%
+            \addtocounter{tasktmax}{\@@hmax}%
           \fi%
         }%
         \hspace{\the\taskspace}%
@@ -132,6 +133,19 @@
   \@task@setregs#1||%
   \addtocounter{taskaomin}{\@@hmin}%
   \addtocounter{taskaomax}{\@@hmax}%
+}
+
+
+\def\@task@complete#1{%
+  \ifx\@@h\empty\else
+    \expandafter\@task@setregs\@@h||%
+    % undo previous operation
+    \addtocounter{tasktmin}{-\@@hmin}%
+    \addtocounter{tasktmax}{-\@@hmax}%
+    % add exact time
+    \addtocounter{tasktmin}{#1}%
+    \addtocounter{tasktmax}{#1}%
+  \fi
 }
 
 
