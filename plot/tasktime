@@ -31,9 +31,9 @@ set ylabel "Hours"
 set grid y
 set xtics rotate by -45
 
-plot "tasktime.dat" using 1:6:6:7:7:xtic(2) title 'Overlap Time Interval' \
+plot "tasktime.dat" using 1:6:6:7:7:xtic(2) title 'Overlap Hour Interval' \
         with candlesticks whiskerbars 0.5 lt 2 lc rgb "#55ee55", \
-     "tasktime.dat" using 1:3:3:4:4:xtic(2) title 'Man Time Interval' \
+     "tasktime.dat" using 1:3:3:4:4:xtic(2) title 'Man-Hour Interval' \
         with candlesticks whiskerbars 0.5 lt 1 lc rgb "#ee5555", \
      "tasktime.dat" using 1:8 title 'Overlap Mean' with lines lt 2 lc rgb "black", \
      "tasktime.dat" using 1:5 title 'Man-Hour Mean' with lines lc rgb "black" lt 1
