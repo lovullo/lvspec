@@ -1,12 +1,30 @@
 set terminal pngcairo size 1024,768
 set termopt dashed
+
+set multiplot
+set offsets 1, 1, 0, 0
+
+set yrange [0:100]
+set xlabel ""
+set ylabel ""
+unset xtics
+unset ytics
+set origin 0.068, 0.120
+set size 0.932, 0.806
+unset grid
+set style fill transparent solid 0.3
+plot "tasktime.dat" using 1:9:(0) title "Confidence %" with filledcurves lc rgb "purple"
+
 set key above horizontal autotitle columnheader
+set yrange [*:*]
 set bars 5.0
+set ytics
+set origin 0, 0
+set size 1, 1
 set style fill transparent pattern 4 border -1
 set xlabel "Date"
 set ylabel "Hours"
 set grid y
-set offsets 1, 1, 0, 0
 set xtics rotate by -45
 
 plot "tasktime.dat" using 1:6:6:7:7:xtic(2) title 'Overlap Time Interval' \
@@ -15,3 +33,4 @@ plot "tasktime.dat" using 1:6:6:7:7:xtic(2) title 'Overlap Time Interval' \
         with candlesticks whiskerbars 0.5 lt 1 lc rgb "#ee5555", \
      "tasktime.dat" using 1:8 title 'Overlap Mean' with lines lt 2 lc rgb "black", \
      "tasktime.dat" using 1:5 title 'Man-Hour Mean' with lines lc rgb "black" lt 1
+unset multiplot
