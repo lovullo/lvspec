@@ -32,6 +32,7 @@
 \RequirePackage{amssymb}
 \RequirePackage{multirow}
 \RequirePackage{task}
+\RequirePackage{booktabs}
 
 
 % default hyperlink color
