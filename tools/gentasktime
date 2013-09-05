@@ -25,12 +25,15 @@ domake \
         last=""
       }
 
-      /days ago|^(1[5-9]|2[0-9]) hours ago/{
+      /(days|weeks) ago|^(1[5-9]|2[0-9]) hours ago/{
         if ( $0 ~ /hours/ ) {
           $1 = 1
         }
+        if ( $0 ~ /weeks/ ) {
+          $1 = $1*7
+        }
         if ( $1 == last ) next;
-        if ( $1 < last ) nextfile;
+        if ( $1 < last ) next;
         last = $1;
         print $1, $NF;
       }
@@ -41,6 +44,6 @@ domake \
         && echo -n "-$n " \
         && gendate \
         && tail -n1 taskstats.dat \
-        || exit 1
+        || { echo "Aborting data gathering."; exit 1; }
     done
   )
