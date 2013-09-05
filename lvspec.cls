@@ -309,7 +309,7 @@
   \gdef\chapter##1{\pnumoff\@chapterorig{##1}\pnumrest\sinit}
   \gdef\section##1{\pnumoff\@sectionorig{##1}\pnumrest\sinit\smarkright{##1}}
   \gdef\subsection##1{\pnumoff\@subsectionorig{##1}\pnumrest\sinit\smarkright{##1}}
-  \gdef\subsubsection##1{\pnumoff\@subsubsectionorig{##1}\pnumrest\sinit\smarkright{##1}}
+  \gdef\subsubsection##1{\pnumoff\@subsubsectionorig{##1}\pnumrest\sinit}
   \gdef\footnote##1{\pnumoff\@footnoteorig{##1}\pnumrest}
   \gdef\footnotetext##1{\pnumoff\@footnotetextorig{##1}\pnumrest}
 }
