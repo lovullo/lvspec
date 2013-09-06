@@ -19,23 +19,19 @@ domake \
   && \
   (
     echo -n '0 ' && gendate && tail -n1 taskstats.dat \
-    && git log --no-merges --pretty=format:'%ar %h' -- "$path" \
+    && git log --no-merges --pretty=format:'%at %h' -- "$path" \
     | awk '
       BEGIN {
-        last=""
+        last=0
+        now=systime()
       }
 
-      /(days|weeks) ago|^(1[5-9]|2[0-9]) hours ago/{
-        if ( $0 ~ /hours/ ) {
-          $1 = 1
-        }
-        if ( $0 ~ /weeks/ ) {
-          $1 = $1*7
-        }
-        if ( $1 == last ) next;
-        if ( $1 < last ) next;
-        last = $1;
-        print $1, $NF;
+      {
+        # calculate the number of days ago this was
+        ago = int( ( now - $1 ) / 86400 );
+        if ( ago <= last ) next;
+        last = ago;
+        print ago, $NF;
       }
     ' \
     | while read n h; do
