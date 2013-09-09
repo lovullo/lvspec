@@ -513,6 +513,21 @@
   }%
 }%
 
+% temporary until sPxTeX, after which it will be deprecated (but *never*
+% removed, for bc)
+\def\sigauth#1{%
+  \gdef\@@margin@sig@repl{%
+    \index{Approved@\textbf{Approved}}%
+    \raisebox{0ex}[2ex][1ex]{%
+      \shortstack{%
+        {\small\bf Approved.}%
+        \\%
+        {\scriptsize\sl by #1}%
+      }%
+    }%
+  }%
+}
+
 
 %%
 % idxhat (index)
