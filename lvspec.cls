@@ -381,10 +381,13 @@
 % Common macros
 %
 \def\shall {Shall }
+\let\Shall\shall
 \def\shallnot {Shall Not }
+\let\Shallnot\shallnot
 \def\must {Must }
 \def\mustnot {Must Not }
 \def\may {May }
+\let\May\may
 \def\exempt {Exempt }
 \def\unspecified{Unspecified}
 \AtBeginDocument{%
