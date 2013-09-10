@@ -3,6 +3,8 @@
 \RequirePackage[usenames,dvipsnames]{xcolor}
 \RequirePackage{etex}
 
+\newif\ifshowtasktime
+
 \newcommand\taskname{Requisite}
 
 % Tango Icon Theme Aluminum
@@ -97,13 +99,17 @@
           \\
           \vphantom{M}%
           \ifx\@@h\empty\else
-            {\small\@task@h#1||\,h}%
+            \ifshowtasktime
+              {\small\@task@h#1||\,h}%
+            \fi
           \fi%
           \\
           \vphantom{M}%
           \ifx\@@h\empty\else
             \@task@setregs#1||%
-            {\scriptsize \the\@@hconf\% Confidence}%
+            \ifshowtasktime
+              {\scriptsize \the\@@hconf\% Confidence}%
+            \fi
             % advance the total counters
             \addtocounter{tasktmin}{\@@hmin}%
             \addtocounter{tasktmax}{\@@hmax}%
@@ -175,71 +181,75 @@
 
 
 \newcommand\tasksummary[1][]{{%
-  \vfill
-  \subsection{Summary}
-  \pnumoff
-  \edef\@@range{\arabic{tasktmin}-\arabic{tasktmax}}%
-  \par {\sc Time Interval:} \expandafter\@task@h\@@range|| Hours%
-  % determine confidence
-  \expandafter\@task@setregs\@@range||%
-  \expandafter\@task@setregs@vari\@@range||%
-  \par {\sc Confidence:} \the\@@hconf\%%
-  \par {\sc Variability:} \the\@@hvari\%%
-  % reset counters
-  \addtocounter{taskamin}{\value{tasktmin}}%
-  \addtocounter{taskamax}{\value{tasktmax}}%
-  \setcounter{tasktmin}{0}%
-  \setcounter{tasktmax}{0}%
-  % output any comments, if available
-  \def\@@comments{#1}%
-  \ifx\@@comments\empty\else
-    \par\@@comments
+  \ifshowtasktime
+    \vfill
+    \subsection{Summary}
+    \pnumoff
+    \edef\@@range{\arabic{tasktmin}-\arabic{tasktmax}}%
+    \par {\sc Time Interval:} \expandafter\@task@h\@@range|| Hours%
+    % determine confidence
+    \expandafter\@task@setregs\@@range||%
+    \expandafter\@task@setregs@vari\@@range||%
+    \par {\sc Confidence:} \the\@@hconf\%%
+    \par {\sc Variability:} \the\@@hvari\%%
+    % reset counters
+    \addtocounter{taskamin}{\value{tasktmin}}%
+    \addtocounter{taskamax}{\value{tasktmax}}%
+    \setcounter{tasktmin}{0}%
+    \setcounter{tasktmax}{0}%
+    % output any comments, if available
+    \def\@@comments{#1}%
+    \ifx\@@comments\empty\else
+      \par\@@comments
+    \fi
+    \pnumrest
   \fi
-  \pnumrest
 }}
 
 
 \newwrite\@taskstats
 \newcommand\projectsummary{{%
-  \section{Project Summary}
-  \pnumoff
-  \edef\@@range{\arabic{taskamin}-\arabic{taskamax}}%
-  \par {\sc Non-Overlapping Time Interval:}%
-  \space\expandafter\@task@h\@@range|| Man Hours%
-  % determine confidence
-  \expandafter\@task@setregs\@@range||%
-  \expandafter\@task@setregs@vari\@@range||%
-  \par {\sc Confidence:} \the\@@hconf\%%
-  \par {\sc Variability:} \the\@@hvari\%%
-  % calculate median
-  \newcount\@@med
-  \advance\@@med \value{taskamin}%
-  \advance\@@med \value{taskamax}%
-  \divide\@@med by 2\relax
-  % calculate non-overlap
-  \newcount\@@nomin \newcount\@@nomax
-  \advance\@@nomin \value{taskamin}%
-  \advance\@@nomax \value{taskamax}%
-  \advance\@@nomin -\value{taskaomin}%
-  \advance\@@nomax -\value{taskaomax}%
-  % calculate overlap median
-  \newcount\@@omed
-  \advance\@@omed\@@nomin
-  \advance\@@omed\@@nomax
-  \divide\@@omed by 2\relax
-  % write task stats to file (can be used for reporting by building consecutive
-  % versions, concatenating the data, taking the last row for each date and
-  % plotting, for example)
-  \immediate\openout\@taskstats=taskstats.dat
-  \immediate\write\@taskstats{min max med omin omax omed cp vp}%
-  \immediate\write\@taskstats{%
-    \arabic{taskamin} \arabic{taskamax} \the\@@med
-    \space\the\@@nomin \space \the\@@nomax \space\the\@@omed
-    \space\the\@@hconf \space\the\@@hvari
-  }%
-  \immediate\closeout\@taskstats
-  % reset counters
-  \setcounter{taskamin}{0}\setcounter{taskamax}{0}%
-  \setcounter{taskaomin}{0}\setcounter{taskaomax}{0}%
-  \pnumrest
+  \ifshowtasktime
+    \section{Project Summary}
+    \pnumoff
+    \edef\@@range{\arabic{taskamin}-\arabic{taskamax}}%
+    \par {\sc Non-Overlapping Time Interval:}%
+    \space\expandafter\@task@h\@@range|| Man Hours%
+    % determine confidence
+    \expandafter\@task@setregs\@@range||%
+    \expandafter\@task@setregs@vari\@@range||%
+    \par {\sc Confidence:} \the\@@hconf\%%
+    \par {\sc Variability:} \the\@@hvari\%%
+    % calculate median
+    \newcount\@@med
+    \advance\@@med \value{taskamin}%
+    \advance\@@med \value{taskamax}%
+    \divide\@@med by 2\relax
+    % calculate non-overlap
+    \newcount\@@nomin \newcount\@@nomax
+    \advance\@@nomin \value{taskamin}%
+    \advance\@@nomax \value{taskamax}%
+    \advance\@@nomin -\value{taskaomin}%
+    \advance\@@nomax -\value{taskaomax}%
+    % calculate overlap median
+    \newcount\@@omed
+    \advance\@@omed\@@nomin
+    \advance\@@omed\@@nomax
+    \divide\@@omed by 2\relax
+    % write task stats to file (can be used for reporting by building consecutive
+    % versions, concatenating the data, taking the last row for each date and
+    % plotting, for example)
+    \immediate\openout\@taskstats=taskstats.dat
+    \immediate\write\@taskstats{min max med omin omax omed cp vp}%
+    \immediate\write\@taskstats{%
+      \arabic{taskamin} \arabic{taskamax} \the\@@med
+      \space\the\@@nomin \space \the\@@nomax \space\the\@@omed
+      \space\the\@@hconf \space\the\@@hvari
+    }%
+    \immediate\closeout\@taskstats
+    % reset counters
+    \setcounter{taskamin}{0}\setcounter{taskamax}{0}%
+    \setcounter{taskaomin}{0}\setcounter{taskaomax}{0}%
+    \pnumrest
+  \fi
 }}
