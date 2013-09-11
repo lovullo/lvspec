@@ -681,6 +681,7 @@
   The definitions in this section \shall supersede any other uses of these terms,
   regardless of their common use in the insurance industry or elsewhere.
 
+  \sigauth{NL}
   Multiple terms that share the same definition will be delimited with semicolons.
 
   \subsection{Specification Terminology}
