@@ -416,7 +416,17 @@
   % get rid of mysterious magical hspace that appears from the marginpar
   \hskip-1ex\relax%
 }
-\def\dfn#1{{\sl\@idxhat@idx{#1}\/}}
+\def\dfn#1#2{%
+  \begingroup
+    \sl
+    \ifx#1*
+      #1%
+    \else
+      \@idxhat@idx{#1#2}%
+    \fi
+  \/
+  \endgroup
+}
 \def\rfc#1{{\tt RFC #1}}
 \def\hex#1{{\tt 0x#1}}
 \def\code#1{{\tt#1}}
