@@ -156,12 +156,16 @@
   % the current environment in @currenvir)
   \def\@@document{document}%
   \def\@@premcalc{premcalc}%
+  \def\@@forms{forms}%
   % allow document by default
   \let\@@cmp\@currenvir
+  % XXX: moveme
   % allow premcalc env
   \ifx\@currenvir\@@premcalc
     \let\@@cmp\@@document
-  \fi
+  \else\ifx\@currenvir\@@forms
+    \let\@@cmp\@@document
+  \fi\fi
   % output if match
   \ifx\@@cmp\@@document%
     \ifx\haspnum1\relax
