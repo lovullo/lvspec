@@ -420,7 +420,7 @@
   \begingroup
     \sl
     \ifx#1*
-      #1%
+      #2%
     \else
       \@idxhat@idx{#1#2}%
     \fi
