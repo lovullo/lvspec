@@ -33,6 +33,7 @@
 \RequirePackage{multirow}
 \RequirePackage{task}
 \RequirePackage{booktabs}
+\RequirePackage{paralist}
 
 
 % default hyperlink color
