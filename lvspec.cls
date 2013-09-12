@@ -724,6 +724,7 @@
   \iflvspec@bib
     \bibliographystyle{plain}
     \renewcommand{\bibname}{References}
+    \addcontentsline{toc}{chapter}{References}
     \bibliography{common}
   \fi
   \begingroup
