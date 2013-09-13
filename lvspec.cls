@@ -169,7 +169,9 @@
     \let\@@cmp\@@document
   \else\ifx\@currenvir\@@protdev
     \let\@@cmp\@@document
-  \fi\fi\fi
+  \else\ifx\@currenvir\@@coglclass
+    \let\@@cmp\@@document
+  \fi\fi\fi\fi
   % output if match
   \ifx\@@cmp\@@document%
     \ifx\haspnum1\relax
@@ -420,15 +422,14 @@
   % get rid of mysterious magical hspace that appears from the marginpar
   \hskip-1ex\relax%
 }
-\def\dfn#1#2{%
+\def\dfn#1{%
   \begingroup
-    \sl
     \ifx#1*
-      #2%
+      \aftergroup\dfn%
     \else
-      \@idxhat@idx{#1#2}%
+      \sl
+      \@idxhat@idx{#1}%
     \fi
-  \/
   \endgroup
 }
 \def\rfc#1{{\tt RFC #1}}
