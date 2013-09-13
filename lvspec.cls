@@ -157,6 +157,7 @@
   \def\@@document{document}%
   \def\@@premcalc{premcalc}%
   \def\@@forms{forms}%
+  \def\@@forms{protdev}%
   % allow document by default
   \let\@@cmp\@currenvir
   % XXX: moveme
@@ -165,7 +166,9 @@
     \let\@@cmp\@@document
   \else\ifx\@currenvir\@@forms
     \let\@@cmp\@@document
-  \fi\fi
+  \else\ifx\@currenvir\@@protdev
+    \let\@@cmp\@@document
+  \fi\fi\fi
   % output if match
   \ifx\@@cmp\@@document%
     \ifx\haspnum1\relax
