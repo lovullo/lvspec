@@ -20,7 +20,7 @@
 % base class, defaulting to 10pt
 \LoadClass[10pt]{scrreprt}
 
-\RequirePackage[top=3.5cm,bottom=5cm,width=\textwidth]{geometry}
+\RequirePackage[top=4.5cm,bottom=5cm,width=\textwidth]{geometry}
 \RequirePackage{makeidx}
 \RequirePackage{minitoc}
 \RequirePackage{titlesec}
