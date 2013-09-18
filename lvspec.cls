@@ -612,6 +612,7 @@
 % Hyphenation
 %
 \hyphenation{Concept-One}
+\hyphenation{De-Rou-sseau}
 
 
 
