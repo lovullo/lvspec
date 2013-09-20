@@ -157,7 +157,7 @@
   \def\@@document{document}%
   \def\@@premcalc{premcalc}%
   \def\@@forms{forms}%
-  \def\@@forms{protdev}%
+  \def\@@protdev{protdev}%
   \def\@@coglclass{c1glclass}%
   % allow document by default
   \let\@@cmp\@currenvir
