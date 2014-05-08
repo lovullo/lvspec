@@ -1,0 +1,16 @@
+% LoVullo rater specification iso territory abstraction
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{raterspec/isoterr}
+\ProcessOptions\relax
+
+%
+% N.B. Expects s:isoterr-zips to be a defined reference
+%
+
+
+\def\isoterr#1{%
+  \hyperref[s:isoterr-zips]{ISO Territory #1}%
+}
+

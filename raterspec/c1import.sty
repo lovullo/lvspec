@@ -1,0 +1,32 @@
+% LoVullo rater specification c1 import
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{raterspec/c1import}
+\ProcessOptions\relax
+
+
+\newenvironment{c1glclass}[1]%
+  {%
+    \sigkeep
+    \def\@@class{#1}%
+    \let\basis\@coglclass@basis
+    \let\prem\@coglclass@prem
+  }%
+  {%
+    \par This class \shall only be applicable when each of the following is
+    true:
+    \begin{enumerate}
+      \@cmatch@enable
+      \matchin{class}{\@@class}%
+    \end{enumerate}
+    \sigunkeep
+  }
+
+\def\@coglclass@basis#1{%
+  \par The premium basis \shall be the~\paramrefd{#1}~(\paramref{#1}).
+}
+\def\@coglclass@prem#1{%
+  \par The premium and~rate \shall be derived from~\sref{#1}.
+}
+

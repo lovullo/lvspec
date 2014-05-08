@@ -1,0 +1,26 @@
+% LoVullo rater specification iso class abstraction
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{raterspec/isoclass}
+\ProcessOptions\relax
+
+
+\def\isoclassdef#1 #2\par{%
+  \index{ISO!class code!#1|(}%
+    % indicate that this has been defined (semantic checking)
+    \expandafter\gdef\csname isoclass@code@#1\endcsname{}%
+    % typeset and provide hyperlink (intended for a description env)
+    \item[\hypertarget{@isoclass:#1}{#1}] #2\par%
+  \index{ISO!class code!#1|)}%
+}
+\def\isoclassref#1{%
+  % ensure that the iso class exists
+  \expandafter\ifx\csname isoclass@code@#1\endcsname\relax%
+    \errmessage{unknown ISO class code `#1'}
+  \fi
+  \index{ISO!class code!#1}%
+  \hyperlink{@isoclass:#1}{#1}%
+}
+\let\isoclass\isoclassref
+

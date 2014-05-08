@@ -1,0 +1,53 @@
+% LoVullo rater specification forms
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{raterspec/form}
+\ProcessOptions\relax
+
+
+\newenvironment{forms}[2]%
+  {%
+    \let\mandatory\@form@mandatory
+    \sigkeep
+    Applicable form code(s): \@formfmt#1,||.
+    \par The form description \shall read:
+    \begin{quote}
+      \sf\hskip-0.52em``#2''
+    \end{quote}
+    % TODO: remove once we're using sPxTeX
+    \pnumon
+    The form(s) \shall be applicable only when each of the following conditions
+    is met:%
+    \begin{enumerate}
+    \@cmatch@enable
+    \ignorespaces
+  }%
+  {%
+    \end{enumerate}
+    \sigunkeep
+  }
+
+\def\@form@mandatory{%
+  \item Form is mandatory and \shall always be applicable.%
+}
+
+\newcount\@formprev
+\def\@formfmt#1,#2||{%
+  \index{forms!codes!#1}%
+  \def\@@chk{#2}%
+  \ifnum\@formprev>0\relax
+    \ifx\@@chk\empty
+      \space and~%
+    \else
+      ,\space
+    \fi
+  \fi
+  {\sf#1}%
+  % recurse
+  \ifx\@@chk\empty\else
+    \advance\@formprev by 1\relax
+    \@formfmt#2||%
+  \fi
+}
+

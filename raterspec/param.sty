@@ -1,0 +1,269 @@
+% LoVullo rater specification params
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{raterspec/param}
+\ProcessOptions\relax
+
+
+% special keywords for base param types
+\def\@coreptype{core}
+\def\@enumptype{enum}
+\def\@unionptype{union}
+
+\def\typedef{%
+  \begingroup% ended by \@dotypedef
+  \catcode`\_=11\relax
+  \@dotypedef
+}
+\def\@dotypedef#1 #2: #3 \par{%
+  \goodbreak%
+  \index{parameter type!#2@\texttt{#2}|(}%
+  \begingroup%
+    % given foo<bar>, get foo and bar separately
+    \edef\@root{\@ptype@root#1<||}%
+    \edef\@type{\@ptype@type#1<#1>||}%
+    \expandafter\gdef\csname ptype@#2\endcsname{#3}%
+    % typeset definition with link
+    \item[%
+      \hypertarget{@ptype:#2}{#2}%
+      \ifx\@root\@coreptype\else%
+        \ $\in\textrm{\rm\@type}$%
+      \fi%
+    ]\hfill\\%
+    \@margin@sig%
+    % ensure that the parent type actually exists
+    \ifx\@root\@coreptype\else%
+      \expandafter\ifx\csname ptype@\@type\endcsname\relax%
+        \errmessage{unknown parent param type `\@type' for `#2'}
+      \fi%
+    \fi%
+    % process any keywords
+    \ifx\@root\@enumptype
+      \aftergroup\@typedef@enum
+    \else\ifx\@root\@unionptype
+      \aftergroup\@typedef@union
+    \fi\fi
+    \index{parameter type!#2@\texttt{#2}|)}%
+    #3\par
+  \endgroup
+  \endgroup% from \typedef
+}
+
+% given a type foo<bar>, returns foo
+\def\@ptype@root#1<#2||{#1}
+% given a type foo<bar>, returns bar
+\def\@ptype@type#1<#2>#3||{#2}
+
+% strips the description and then puts all enums in an aligned environment
+\def\@typedef@enum#1\enumv#2\par{%
+  #1%
+  \vskip0em\relax
+  \begingroup
+    \small
+    % provide some extra give to prevent this from appearing on its own line
+    \vspace{0em plus 0.5\parskip}%
+    \goodbreak
+    {\bf Defined values:}\\
+    \vspace{0.5\parskip}%
+    \begin{tabular}{lc|l}
+      % restore the enumv that we gobbled up
+      \enumv#2
+    \end{tabular}
+  \endgroup
+}
+\def\enumv[#1]#2#3{%
+  % define constant
+  \expandafter\gdef\csname const@#2\endcsname{#1}%
+  \expandafter\gdef\csname const@value@#2\endcsname{#3}%
+  % typeset
+  \index{constant!{\tt#2}}%
+  {\tt\hypertarget{@const:#2}{#2}} & $#3$ & #1 \\
+}
+
+% strips the description and then puts all enums in an aligned environment
+\def\@typedef@union#1\unionv#2\par{%
+  #1%
+  \vskip0em\relax
+  \begingroup
+    \small
+    {\bf Any defined value of:}%
+    \vspace{-\parskip}%
+    \begin{itemize}
+      \setlength{\itemsep}{-\parskip}%
+      % restore the unionv that we gobbled up
+      \unionv#2
+    \end{itemize}
+  \endgroup
+}
+\def\unionv#1{%
+  % does this type exist?
+  \expandafter\ifx\csname ptype@#1\endcsname\relax%
+    \errmessage{unknown param type `#1' for union}
+  \fi%
+  \item{\typeref{#1}}
+}
+
+\def\typeref#1{%
+  \index{parameter type!#1@\texttt{#1}}%
+  \hyperlink{@ptype:#1}{\tt#1}%
+}
+\let\type\typeref
+
+\def\constref #1{%
+  \@ifnumeric{#1}%
+    % numeric constants are simply output with no hyperlink
+    $#1$%
+  \else
+    \index{constant!{\tt#1}}\hyperlink{@const:#1}{\tt#1}%
+  \fi
+}
+\let\const\constref
+
+% constant reference, show description
+\def\constrefd#1{%
+  \@ifnumeric{#1}%
+    % numeric constants are simply output with no hyperlink
+    $#1$%
+  \else
+    \index{constant!{\tt#1}}%
+    \hyperlink{@const:#1}%
+    {\csname const@#1\endcsname}%
+  \fi
+}
+\def\constrefdd#1{\constrefd{#1}\dotfill}
+% constant reference, show value
+\def\constrefv#1{%
+  \@ifnumeric{#1}%
+    % numeric constants are simply output with no hyperlink
+    $#1$%
+  \else
+    \index{constant!{\tt#1}}%
+    \hyperlink{@const:#1}%
+    {\csname const@value@#1\endcsname}%
+  \fi
+}
+% link to constant with alternate text
+\def\constrefalt#1#2{%
+  \index{constant!{\tt#1}}%
+  \hyperlink{@const:#1}{#2}%
+}
+
+\def\@type@exists@err#1{{%
+  \expandafter\let\expandafter\@chk\csname ptype@#1\endcsname
+  \ifx\@chk\relax
+    \errmessage{parameter `#1' is undefined}%
+  \fi
+}}
+\def\@const@exists@err#1{{%
+  % ignore numeric constants (lazy check; anything that begins with a number)
+  \@ifnumeric{#1}\else
+    \expandafter\let\expandafter\@chk\csname const@#1\endcsname
+    \ifx\@chk\relax
+      \errmessage{constant `#1' is undefined}%
+    \fi
+  \fi
+}}
+
+\def\@const@desc#1{{%
+  \@ifnumeric{#1}%
+    % just output the text
+    $#1$%
+  \else
+    % output desc
+    \csname const@#1\endcsname
+  \fi
+}}
+
+
+% denotes a param that will likely be calculated
+\def\metaparamdef{\paramdef}
+
+
+% param definition
+% note that the description is included in this input as well; this allows us to
+% use this information for code generation/etc
+\def\paramdef{%
+  \begingroup
+  \catcode`_=11\relax
+  \@doparamdef
+}
+\def\@doparamdef#1 #2: #3 \par{%
+  \goodbreak%
+  \index{parameter!#2@\texttt{#2}|(}%
+  \begingroup%
+    \def\@given{#1}%
+    % given foo<bar>, get foo and bar separately
+    \edef\@root{\@ptype@root#1<||}%
+    \edef\@type{\@ptype@type#1<#1>||}%
+    \expandafter\gdef\csname param@#2\endcsname{#3}%
+    % does the given type exist (note that this check assumes that the typedef
+    % appears before the param in the specs, as is currently the case)
+    \expandafter\ifx\csname ptype@\@type\endcsname\relax%
+      \errmessage{unknown param type: \@type}
+    \fi%
+    % typeset definition with link
+    \item[%
+      \hypertarget{@param:#2}{{\tt#2}}%
+      \ $\in\textrm{%
+        \rm\typeref{\@type}%
+        % output root only if provided (if not, then because of how \@type
+        % called \@ptype@type, it will be equal to #1)
+        \ifx\@root\@given\else%
+          \ $\langle$\@root$\rangle$
+        \fi
+      }$%
+    ]\hfill\\%
+    \@margin@sig%
+    % remove mysterious space from margin sig
+    \hskip-1ex\relax%
+    #3%
+    \ifx\@root\@given
+      \@codegen{<lv:param name="#2" type="\@type" desc="#3"/>}%
+    \else
+      \@codegen{<lv:param name="#2" type="\@type" set="\@root"%
+        \space desc="#3"/>%
+      }%
+    \fi
+  \endgroup%
+  \index{parameter!#2@\texttt{#2}|)}%
+  \endgroup
+}
+
+\def\paramref{%
+  \begingroup% ended by \@dotypedef
+  \catcode`\_=11\relax
+  \@doparamref
+}
+\def\@doparamref#1{%
+  % prevent scantokens from adding a space at the end
+  \endlinechar-1\relax
+  \expandafter\let\expandafter\@@chk\csname param@#1\endcsname
+  \ifx\@@chk\relax
+    \PackageError{dwspec}{unknown param: #1}
+  \fi
+  \index{parameter!#1@\texttt{#1}}%
+  \hyperlink{@param:#1}%
+    {\tt\scantokens{#1}}%
+  \endgroup
+}
+\let\param\paramref
+
+\def\paramrefd#1{%
+  \expandafter\let\expandafter\@@pchk\csname param@#1\endcsname
+  \ifx\@@pchk\empty
+    \PackageError{dwspec}{Unknown parameter: #1}%
+  \else
+    % output
+    \@@pchk
+  \fi
+}
+
+\def\locparam#1{%
+  \ifmmode
+    \mathop{\paramref{#1}_\loc}
+  \else
+    $\locparam{#1}$%
+  \fi
+}
+

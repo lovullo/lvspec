@@ -1,0 +1,355 @@
+% LoVullo rater specification classification
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{raterspec/class}
+\ProcessOptions\relax
+
+% the first argument (optionally) provides a unique id for this classification
+% (see further information on this below)
+\newenvironment{classification}[1][]%
+  {%
+    \def\@cid{#1}%
+    \leavevmode
+    \label{@classify:#1}%
+    % if a classification id was provided, output it in the left margin (this
+    % allows us to eyeball summaries or common classifications across
+    % specifications, as well as match it up to the code)
+    \if\@cid\empty\else
+      % typeset id
+      \llap{{\scriptsize\bf\@cid\hskip4ex\relax}}%
+    \fi%
+    % enable rule definitions
+    \@cmatch@enable
+    % the first paragraph will constitute the description (and will contain a
+    % signature line)
+    \@margin@sig\@class@mkdesc\@cid
+  }
+  {%
+    % this is opened by \@class@mkdesc
+    \@codegen{</lv:classify>}%
+    \end{@classification@rules}%
+  }
+
+\newenvironment{@classification@rules}
+  {%
+    {\bf Rules:}%
+    \penalty1000\relax
+    \begin{enumerate}
+  }
+  {%
+    \end{enumerate}
+  }
+
+\def\@match@formal#1{{%
+  \\\footnotesize{\bf Formally:}%
+  \space#1%
+}}
+
+\def\@matchany #1 {%
+  \@codegen{  <lv:any>}%
+  \item Any one of the following \must be true:
+  \begin{enumerate}
+    #1
+  \end{enumerate}
+  \@codegen{  </lv:any>}%
+}
+
+\def\@matchall #1 {%
+  \@codegen{  <lv:all>}%
+  \item Each of the following \must be true:
+  \begin{enumerate}
+    #1
+  \end{enumerate}
+  \@codegen{  </lv:all>}%
+}
+
+\def\@matchtodo#1{\item\todo{#1}}
+
+% determine what ref is appropriate
+\def\@magicref#1{{%
+  % param?
+  \expandafter\let\expandafter\@@chk\csname param@#1\endcsname
+  \ifx\@@chk\relax
+    \expandafter\let\expandafter\@@chk\csname classify@#1\endcsname
+    \ifx\@@chk\relax
+      % no known custom type (may be a normal ref)
+      \PackageWarning{dwspec}{unknown magic ref `#1'}%
+    \else
+      \classifyref{#1}%
+    \fi
+  \else
+    \paramref{#1}%
+  \fi
+}}
+
+\def\@cmatcheq{%
+  \begingroup
+  \catcode`\_=11\relax
+  \@docmatcheq
+}
+\def\@docmatcheq#1#2{%
+  \@codegen{  <lv:match on="#1" value="#2" />}%
+  % whatever we are matching on must exist as either a classification or an
+  % input field (param)
+  \item\@cmatch@desc@or@fail{#1}%
+  \space \must be a(n)\space
+  % ensure that the constant exists
+  \@const@exists@err{#2}%
+  % typeset
+  \csname const@#2\endcsname.
+  \@match@formal{\@magicref{#1} $=$ \constref{#2}}%
+  \endgroup
+}
+
+\def\@cmatchneq{%
+  \begingroup
+  \catcode`\_=11\relax
+  \@docmatchneq
+}
+\def\@docmatchneq#1#2{%
+  \@codegen{  <lv:match on="#1">}%
+  \@codegen{    <c:ne>}%
+  \@codegen{      <c:value-of name="#2" />}%
+  \@codegen{    </c:ne>}%
+  \@codegen{  </lv:match>}%
+  % whatever we are matching on must exist as either a classification or an
+  % input field (param)
+  \item\@cmatch@desc@or@fail{#1}%
+  \space \mustnot be a(n)\space
+  % ensure that the constant exists
+  \@const@exists@err{#2}%
+  % typeset
+  \csname const@#2\endcsname.
+  \@match@formal{\@magicref{#1} $\neq$ \constref{#2}}%
+  \endgroup
+}
+
+\def\@cmatchlt{%
+  \begingroup
+  \catcode`\_=11\relax
+  \@docmatchlt
+}
+\def\@docmatchlt#1#2{%
+  \@codegen{  <lv:match on="#1">}%
+  \@codegen{    <c:lt>}%
+  \@codegen{      <c:value-of name="#2" />}%
+  \@codegen{    </c:lt>}%
+  \@codegen{  </lv:match>}%
+  % whatever we are matching on must exist as either a classification or an
+  % input field (param)
+  \item\@cmatch@desc@or@fail{#1}%
+  \space \must be less than\nobreakspace
+  % ensure that the constant exists
+  \@const@exists@err{#2}%
+  % typeset
+  \@const@desc{#2}.%
+  \@match@formal{\@magicref{#1} $<$ \constref{#2}}%
+  \endgroup
+}
+
+\def\@cmatchleq{%
+  \begingroup
+  \catcode`\_=11\relax
+  \@docmatchleq
+}
+\def\@docmatchleq#1#2{%
+  \@codegen{  <lv:match on="#1">}%
+  \@codegen{    <c:leq>}%
+  \@codegen{      <c:value-of name="#2" />}%
+  \@codegen{    </c:leq>}%
+  \@codegen{  </lv:match>}%
+  % whatever we are matching on must exist as either a classification or an
+  % input field (param)
+  \item\@cmatch@desc@or@fail{#1}%
+  \space \must be less than or equal to%
+  % ensure that the constant exists
+  \@const@exists@err{#2}%
+  % typeset
+  \nobreakspace\@const@desc{#2}.%
+  \@match@formal{\@magicref{#1} $\leq$ \constref{#2}}%
+  \endgroup
+}
+
+
+\def\@cmatchgt{%
+  \begingroup
+  \catcode`\_=11\relax
+  \@docmatchgt
+}
+\def\@docmatchgt#1#2{%
+  \@codegen{  <lv:match on="#1">}%
+  \@codegen{    <c:gt>}%
+  \@codegen{      <c:value-of name="#2" />}%
+  \@codegen{    </c:gt>}%
+  \@codegen{  </lv:match>}%
+  % whatever we are matching on must exist as either a classification or an
+  % input field (param)
+  \item\@cmatch@desc@or@fail{#1}%
+  \space \must be greater than\nobreakspace
+  % ensure that the constant exists
+  \@const@exists@err{#2}%
+  % typeset
+  \@const@desc{#2}.%
+  \@match@formal{\@magicref{#1} $>$ \constref{#2}}%
+  \endgroup
+}
+
+
+\def\@cmatchgeq#1#2{%
+  \@codegen{  <lv:match on="#1">}%
+  \@codegen{    <c:gte>}%
+  \@codegen{      <c:value-of name="#2" />}%
+  \@codegen{    </c:gte>}%
+  \@codegen{  </lv:match>}%
+  % whatever we are matching on must exist as either a classification or an
+  % input field (param)
+  \item\@cmatch@desc@or@fail{#1}%
+  \space \must be greater than or equal to\nobreakspace
+  % ensure that the constant exists
+  \@const@exists@err{#2}%
+  % typeset
+  \@const@desc{#2}.%
+  \@match@formal{\@magicref{#1} $\geq$ \constref{#2}}%
+}
+
+\def\@cmatchin#1#2{%
+  \@codegen{  <lv:match on="#1" anyOf="#2" />}%
+  % whatever we are matching on must exist as either a classification or an
+  % input field (param)
+  \item\@cmatch@desc@or@fail{#1}%
+  \space \must be a defined\space
+  % ensure that the param type exists
+  \@type@exists@err{#2}%
+  % output the param type description
+  \csname ptype@#2\endcsname.
+  \@match@formal{\@magicref{#1} $\in$ \typeref{#2}}%
+}
+
+\def\@match#1{%
+  \@codegen{  <!-- TODO: custom match; see specs -->}%
+  \item#1.%
+}
+
+\def\@matchtrue#1{%
+  \@codegen{  <lv:match on="#1" value="TRUE" />}%
+  \item\@cmatch@desc@or@fail{#1}.%
+  \@match@formal{\@magicref{#1} $=\top$}%
+}
+\def\@matchfalse#1{%
+  \@codegen{  <lv:match on="#1" value="FALSE" />}%
+  \item It is not true that: \@cmatch@desc@or@fail{#1}.%
+  \@match@formal{\@magicref{#1} $=\bot$}%
+}
+
+\def\@cmatch@enable{%
+  % we're being lazy with this cat code so that it applies to all \match
+  % invocations grouped between this enable cmd and the disable one; this will
+  % cause problems if we need math mode, so it may need to be revisited in the
+  % future
+  \catcode`_=11\relax
+  \let\matchany\@matchany
+  \let\matchall\@matchall
+  \let\matcheq\@cmatcheq
+  \let\matchneq\@cmatchneq
+  \let\matchgt\@cmatchgt
+  \let\matchgeq\@cmatchgeq
+  \let\matchlt\@cmatchlt
+  \let\matchleq\@cmatchleq
+  \let\matchin\@cmatchin
+  \let\matchtrue\@matchtrue
+  \let\matchfalse\@matchfalse
+  \let\matchtodo\@matchtodo
+  \let\match\@match
+}
+
+\def\@class@mkdesc#1 #2 \par{%
+  \@codegen{<lv:classify as="#1" desc="#2">}%
+  {\bf Description:}\space#2\par
+  % record this definition
+  \index{classification!#1@\texttt{#1}}%
+  \expandafter\gdef\csname classify@#1\endcsname{#2}%
+  % place definition into aux file; will be available next pass
+  \protected@write\@auxout{}{%
+    \string\expandafter\string\gdef
+    \string\csname\space classify@#1\string\endcsname{#2}%
+  }%
+  % immediately following the description are the rules
+  \begin{@classification@rules}
+}
+
+\def\@class@desc#1{{%
+  \expandafter\let\expandafter\@@chk\csname classify@#1\endcsname
+  \ifx\@@chk\relax
+    \PackageWarning{dwspec}{unknown classification `#1'}%
+  \else
+    \@@chk
+  \fi
+}}
+
+\def\@cmatch@desc@or@fail#1{{%
+  % grab tokens to check against for param and class definitions
+  \expandafter\let\expandafter\@@pchk\csname param@#1\endcsname
+  \expandafter\let\expandafter\@@cchk\csname classify@#1\endcsname
+  % fail if neither exists
+  \ifx\@@pchk\relax
+    \ifx\@@cchk\relax
+      \PackageWarning{dwspec}{unknown identifier for classification match: #1}
+    \else
+      % output
+      \@@cchk
+    \fi
+  \else
+    % output
+    \@@pchk
+  \fi
+}}
+
+\def\classifyref#1{%
+  \index{classification!#1@\texttt{#1}}%
+  \hyperref[@classify:#1]{%
+    \tt#1%
+  }%
+}
+\def\classifyrefd#1{%
+  \index{classification!#1@\texttt{#1}}%
+  \hyperref[@classify:#1]{%
+    \csname classify@#1\endcsname
+  }%
+}
+\def\classifyrefalt#1#2{%
+  \index{classification!#1@\texttt{#1}}%
+  \hyperref[@classify:#1]{#2}%
+}
+
+
+\def\assign#1#2{$#1$ $=$ #2}%
+\def\loc{\ifmmode\ell\else$\ell$\fi}%
+\def\y{yield}%
+\def\prem{{\tt premium}}%
+
+\newcommand\rate[1][]{%
+  \begingroup
+    \ifmmode\aftergroup\mathop\fi
+  \endgroup
+  {\tt #1rate}%
+}
+
+
+\newenvironment{submission}[2]%
+  {%
+    \begin{classification}[submit-#1-#2]%
+  }%
+  {%
+    \end{classification}
+  }
+
+\def\when#1{%
+  \Shall be applicable only when each of the following is true:%
+  \begin{enumerate}
+    \@cmatch@enable
+    \scantokens{#1}
+  \end{enumerate}%
+}
+\let\When\when
+

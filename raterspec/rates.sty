@@ -1,0 +1,44 @@
+% LoVullo rater specification rate tables
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{raterspec/rates}
+\ProcessOptions\relax
+
+
+\newenvironment{ratetable*}[5][]%
+  {%
+    \def\@@lotcaption{#1}
+    \def\@@label{#2}
+    \def\@@caption{#3}
+    \ifx\@@lotcaption\empty
+      \let\@@lotcaption\@@caption
+    \fi
+    \begin{table}[#5]
+      \caption[\@@lotcaption]{\@@caption}
+      \label{t:\@@label}
+      \centering\footnotesize\sf
+      \hspace*{-\marginparwidth}%
+      \begin{tabular}{#4}
+        \toprule
+  }
+  {%
+        \bottomrule
+      \end{tabular}
+      \hspace*{-\marginparwidth}%
+      \medskip
+    \end{table}
+  }
+
+
+% simplified syntax where a rate table should always appear on a page of floats
+% (which is often the case, since many rate tables tend to be within close
+% proximity to one-another)
+\newenvironment{ratetable}[4][]%
+  {%
+    \begin{ratetable*}[#1]{#2}{#3}{#4}{p}%
+  }%
+  {%
+    \end{ratetable*}%
+  }
+

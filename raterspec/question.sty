@@ -1,0 +1,62 @@
+% LoVullo rater specification questions
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{raterspec/question}
+\ProcessOptions\relax
+
+
+\newlength\questionparsep
+\questionparsep\the\marginparsep
+\newenvironment{qgroup}[1]%
+  {%
+    \subsubsection{#1}%
+    \begin{description}%
+  }%
+  {%
+    \end{description}%
+  }
+
+\newenvironment{subquestions}%
+  {%
+    \begin{description}%
+    \advance\questionparsep by \leftmargin\relax
+  }
+  {%
+    \end{description}%
+  }
+
+
+\def\@qtypedesc@text{any string of characters.}
+\def\@qtypedesc@number{any whole number.}
+\def\@qtypedesc@float{any floating point value.}
+\def\@qtypedesc@noyes{one of either {\sl No\/} or~{\sl Yes}.}
+\def\@qtypedesc@select{one of the options enumerated below:}
+\newcommand\question[5][]{%
+  \item[%
+    \beginundersletter
+      \llap{%
+        \tt\scriptsize\raisebox{-1em}[0em][0em]{%
+          \shortstack[r]{%
+            \scantokens{#2}\\
+            {\tiny \scantokens{#4}}%
+          }%
+        }%
+        \hspace{\the\questionparsep}%
+      }%
+    \endundersletter
+    \ignorespaces#5\unskip
+  ]\hfill\\
+  \@margin@sig
+  \begingroup
+    \def\@mapsto{#3}%
+    \ifx\@mapsto\empty
+      \May not map to any rater input parameter.%
+    \else
+      \Shall map to rater input parameter \paramref{#3}.%
+    \fi
+  \endgroup
+  \space Input value \shall be \csname @qtypedesc@#4\endcsname\space
+  \ignorespaces
+}
+
