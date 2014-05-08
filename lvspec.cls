@@ -623,6 +623,7 @@
 \let\@lvspec@insterminology\relax
 \let\@lvspec@abstract\relax
 \let\@lvspec@pretitle\relax
+\let\@lvspec@posttitle\relax
 \let\@lvspec@titlecontent\relax
 
 % allows us to use the abstract command whilst still using the environment
@@ -736,6 +737,9 @@
     \subsection{Authorization Parties}
     \input{dfn/authparty}
   \fi
+
+  % post-title hooks for content to be rendered at beginning document
+  \@lvspec@posttitle
 }
 
 \AtEndDocument{%
