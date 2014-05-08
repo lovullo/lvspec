@@ -60,6 +60,71 @@
   \input{dfn/rater}
 }
 
+%% note: \pnumoff and \pnumon are temporary kluges (...hopefully)
+
+
+%%
+% Beginning of document
+%
+% The host environment is the same for all new systems
+%
+
+\def\@raterspec@input@types{
+  \PackageWarning{raterspec}{Missing program-specific input parameter types!}
+  \todo{No input parameter types have been defined.}
+}
+
+\def\@raterspec@input@params{
+  \PackageWarning{raterspec}{Missing input parameters!}
+  \todo{No input parameters have been defined.}
+}
+
+\def\@lvspec@posttitle{
+  \pnumoff\part{General System}\pnumon
+
+  \chapter{Host Environment}
+    \input{raterspec/sec/hostenv}
+
+  \chapter{Input Data}
+    \index{input data|(}
+      \input{raterspec/sec/input}
+
+      % implementation-specific parameter types
+      \section{Program-Specific Parameter Types}
+      \sectiondept{it/uw}
+
+      \@raterspec@input@types
+    \index{input data|)}
+
+  \chapter{Input Parameters}
+    \index{input data!parameters|(}
+    \index{parameter|(}
+      \input{raterspec/sec/params}
+      \@raterspec@input@params
+
+    \index{input data!parameters|)}
+    \index{parameter|)}
+}
+
+
+\def\inputtypes#1{
+  \gdef\@raterspec@input@types{
+    % can't really include a sigline here because approvial would be global
+    \pnumoff
+      Parameter types in this section are common to the \@title@short\ program.
+    \pnumon
+    \index{parameter type|(}
+      \input{#1}
+    \index{parameter type|)}
+  }
+}
+
+\def\inputparams#1{
+  \gdef\@raterspec@input@params{
+    \input{#1}
+  }
+}
+
 
 
 %%

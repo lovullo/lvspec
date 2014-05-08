@@ -1,0 +1,43 @@
+% Input parameters
+
+\label{s:params}
+\sectiondept{it}
+
+An implementation \shall support each parameter defined in this section for the
+purpose of accepting input data.
+
+An implementation \shallnot ^fail in ^[fail!error] if a parameter is provided
+that is not listed within this section.\footnote{For example, this allows data
+to be used for multiple suppliers.}
+
+\p{param-fail} An implementation \must ^fail in ^[fail!error] if one or more of
+the parameters defined in this section are not provided, unless the parameter is
+unused in every calculation that applies to the input data. The exact failure
+point is unspecified, but the implementation must not return the value of any
+calculation.
+
+\begin{ex}
+\index{fail!error|(}
+The implementation may check all required parameters before performing any
+calculations, or may decide to defer parameter checking until the parameter is
+actually used for the first time; the latter would be expected to be more
+performant in the case that the input data is expected to be well-formed most of
+the time, but will have wasted many cycles in computing calculations that will
+be thrown away in event of a failure. In the former case, the upfront validation
+cost is more steep, but no cycles are wasted on calculations in the event of an
+immediate failure.
+\index{fail!error|)}
+\end{ex}
+
+An implementation \must ^fail in ^[fail!error] if an ^argument associated with
+its parameter does not fall within the ^domain of the parameter, unless the
+parameter is unused in every calculation that applies to the input data. The
+exact failure point is subject to the same requirements as \pref{param-fail}.
+
+An implementation \mustnot ^fail in ^[fail!error] if an argument associated with
+its parameter \emph{does} fall within its ^[domain], but \may fail for other
+reasons defined within this specification unrelated to the domain.
+
+
+%% content set with \inputparams will be outptu at this point
+

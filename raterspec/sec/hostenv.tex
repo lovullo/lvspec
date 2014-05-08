@@ -1,0 +1,238 @@
+% Host Environment
+
+\begindeptgroup{it}
+
+\def\minmem{$128$~megabytes}
+
+This specification defines a rater designed for integration with LoVullo's Quote
+Server.
+
+\section{Quote Server Integration}
+\label{s:hostenv-qs}
+
+\index{quote server|(}
+\incomplete The implementation \must satisfy at least one of the following
+criteria:
+\begin{enumerate}
+  \item
+  The implementation \shall be written in, or compile to, ^JavaScript and shall
+  provide a \func{rate} function, which \shall itself exchange data with the
+  Quote Server in an implementation-defined manner.\footnote{There is currently
+  no specification for the Quote Server; one is needed.}
+
+  \item
+  The implementation \shall be written in, or compile to, ^PHP and shall
+  integrate with the \index{REST}RESTful interface provided by the ^[LoVullo
+  website] to provide an interface to the Quote Server.
+\end{enumerate}
+
+The implementation \shall return all data suitable for immediate storage in the
+^[bucket].
+\index{quote server|)}
+
+
+\section{Host Architecture and Operating System}
+The implementation \shallnot make any assumptions regarding the host
+architecture, except for those that are enumerated in this section. Furthermore,
+the implementation \shall ensure that the programming language in which the
+implementation is written does not violate the requirements of this section, but
+\shallnot be responsible for any assumptions made by the programming language
+that are not contradicted within this section.\footnote{This section is
+intentionally small, as the high-level languages used in the implementation
+implementation do not rely on many architectural details.}
+
+
+\subsection{Word Size}
+\p{word-size} The host machine ^[word size] \shall be at least 32-bits
+long;\footnote{This word size is limited by the architectures of developer PCs
+and the PCs of users who may be testing the implementation outside of its
+integration with the Quote Server.} implementation \shallnot depend on the
+availability of a larger word size unless such an implementation cannot affect
+the result of any calculation.
+
+The requirement of \pref{word-size} does not apply to ^floating-point datatypes,
+which \may use the full 80~bits permitted by the lower bound of the
+^[floating-point!IEEE 754] ^[floating-point!double-extended] precision format.
+
+
+\subsection{Memory Requirements}
+\index{memory|(}
+The implementation \shall have at least \minmem\ of memory available
+exclusively for its use.
+
+The implementation \may use additional memory if available, but \shallnot fail
+to operate within the requirements of this specification if additional memory is
+not available. If an implementation does not explicitly allocate its own memory
+(e.g. is a dynamically allocated and garbage-collected language) and the
+implementation will automatically fail\footnotemark\ if the memory limit is
+exceeded (a hard memory limit), then the host environment \shall provide at
+least $32$~extra megabytes of memory in addition to the \minmem, allowing the
+implementation to query its memory usage and determine when the minimum memory
+limit has been exceeded.
+\footnotetext{An example of such a language is ^[PHP]. Other languages, such as
+JavaScript, will attempt to garbage collect rather than immediately dying.}
+
+It is the responsibility of the host environment---not the implementation---to
+limit memory consumption.
+
+Should the implementation be unable to allocate additional memory before reaching
+\minmem, and such a failure prohibits successful execution of all remaining
+applicable calculations, then the implementation \shall fail with an unspecified
+error; the remaining execution path after such a failure is \undefined.
+\index{memory|)}
+
+
+\subsection{Scheduling}
+The implementation \shallnot depend on any reasonable scheduling expectations
+and \shall thus continue operation until explicitly interrupted in any
+unspecified manner.
+
+
+\section{Numeric Datatypes}
+An implementation \shallnot use ^fixed-point or ^[binary-coded decimal] (BCD)
+representations of numbers; ^floating-point \shall be used
+instead.\footnote{This restriction exists simply because LoVullo does not make
+use of these other formats.}
+
+All floating-point values \shall be represented as a single-precision floating
+point value as defined by ^[floating-point!IEEE 754]'s ^[floating-point!IEEE
+754!binary32] format. This format as a base of $2$; a 24-bit significand (with
+the highest-order bit implied); an 8-bit exponent; and a single sign bit.
+Whether higher-precision values are truncated or rounded in order to fit into a
+single-precision format is unspecified; the rounding mode is also unspecified.
+
+All other scalar datatypes that are not ^floating-point \shall be able to be
+represented by a signed, two's compliment, 32-bit integer representation.
+
+Unsigned integer types \shallnot be used as the result of any calculation, but
+may be used to hold intermediate results, so long as those intermediate values
+are not returned as the result of another calculation. Intermediate results
+returned only for debugging purposes are exempt from this requirement and their
+limits are unspecified, so long as their values are not returned to the Quote
+Server.\footnote{These restrictions exist to cope with implicit numeric
+representations of various systems and languages.} Unsigned integer results that
+can be represented exactly as a ^floating-point value are too exempt from this
+restriction, so long as the return value indicates that the data type is
+^[floating-point].
+
+
+\subsection{Floating Point Arithmetic}
+\index{floating-point|(}
+This section applies only to implementations that make use of ^floating-point
+arithmetic. Floating point is so-called because the radix point does not have a
+fixed position.
+
+A ^[floating-point!IEEE 754!binary32] ^floating-point value may be computed as
+$$
+  (-1)^s \left(1+\sum\limits_{i=1}^{23} c_{23-i} 2^{-i}\right)
+  2^{e-127},
+$$
+where $s$ is the value of the sign bit, $c_i$ represents the base-2 significand
+(``coefficient'') digit $i$, and $e$ represents the exponent. The added $1$ in
+the calculation is to account for the implicit higher-order bit in the
+significand. The $-127$ offset at the end of the equation is the exponent
+bias.\footnote{While it is unlikely that an implementation will have to
+explicitly compute the value of a binary ^floating-point representation, the
+knowledge is very useful for understanding issues that arise from
+^floating-point arithmetic.}
+
+\subsubsection{Handling of Precision Loss}
+\index{floating-point!rounding|(}
+Rounding errors are particularly problematic with the use of \func{floor} and
+\func{ceil} functions, in which the smallest precision error can drastically
+affect the result of a calculation.
+
+The implementation \shallnot assume the availability of access to hardware
+^floating-point ^[floating-point!status registers]---or any equivalent software
+representation---that indicates loss of precision due to truncation or rounding
+errors.\footnote{Such flags would be ideal, but are inaccessible from both
+JavaScript and ^[PHP]; we must cater to the lowest common denominator.}
+
+The implementation \may employ the common method of performing intermediate
+calculations in a higher-precision format (higher than single-precision) before
+storing the result in a single-precision ^floating-point format.\footnote{The
+rationale behind this decision is that all systems in this office use x86
+processors, which support 80-bit ^[floating-point!double-extended] precision
+^floating-point registers.}
+
+To avoid problems inherent with ^floating-point arithmetic, an implementation
+\may (and is encouraged to) use integer arithmetic, so long as the results can
+be sufficiently represented as a signed 32-bit integer type; the integer value
+may then be converted back into a ^floating-point type. Since a single-precision
+significand is $23$ bits in length, excluding the implicit high-order bit, this
+therefore means that an integer value of $-2^{23} \leq n \leq 2^{23}-1$ can be
+converted between the two types without loss of data, yielding a range of
+$-8388608 \leq n \leq 8388607$.
+
+\begin{ex}
+  Let~$a=0.60$, $b=0.30$ and~$c=0.10$, where~$a$, $b$ and~$c$ are
+  single-precision ^floating-point numbers (^[floating-point!IEEE
+  754!binary32]).  Consider that we wish to apply these variables to the
+  seemingly innocuous calculation
+    $${\left\lfloor 100\left(a+b+c\right) \right\rfloor \over100},$$
+  which will round up to the nearest penny. Intuitively (and mathematically), we
+  would expect that
+    $$
+        {\left\lfloor 100\left(0.60+0.30+0.10\right) \right\rfloor \over100}
+      = {\left\lfloor 100\left(1.00\right) \right\rfloor \over100}
+      = {\left\lfloor 100 \right\rfloor \over100}
+      = 1.00.
+    $$
+  However, none of the values of~$a$, $b$ or~$c$ can be represented exactly in
+  any binary ^floating-point format due to how it is converted from decimal.
+  Therefore (leaving the details aside), depending on how the implementation
+  performs its arithmetic, we could end up with something like this:
+    $$
+        {\left\lfloor 100\left(0.60+0.30+0.10\right) \right\rfloor \over100}
+      = {\left\lfloor 100\left(0.99\overline{9}\right) \right\rfloor \over100}
+      = {\left\lfloor 99.9\overline{9} \right\rfloor \over100}
+      = {99 \over100}
+      = 0.99.\footnotemark
+    $$\footnotetext{This can be seen in ^PHP with \code{var\_dump( floor(
+    100 * (0.60+0.30+0.10) ) / 100 )}, which yields the value $0.99$. Using the
+    v8 ^JavaScript engine, the same result of $0.99$ is obtained with
+    \code{Math.floor( 100 * (0.60+0.30+0.10) ) / 100}.}
+
+   While this specific equation may not seem too bad---resulting in only a
+   $0.01$ difference from the expected value, which is still very bad in
+   financial systems---consider what would have happened if we had simply taken
+   the floor; this would have resulted in a $1.00$ difference.
+
+   Alternatively, we could let~$a=60$, $b=30$ and~$c=10$, add the values using
+   integer arithmetic which will always yield the value~$100$, and then use that
+   value in the equation, eliminating the floating-point precision loss. Since
+   we only care about values up to two decimal places here, such a conversion
+   could be done by casting the value of $100n$ to an integer, which would
+   truncate at the radix point, thereby removing the least inaccurate
+   bits.\footnote{In v8, \code{(0.6*100)+(0.3*100)+(0.1*100)} yields $100$; the
+   same is true for ^[PHP].}
+\end{ex}
+
+It is likely that an implementation does not need the full 24-bits of the
+significand. When the erroneous portion of a floating-point value is entirely
+contained within the low-order bits of the significand, an implementation \may
+truncate or round in an unspecified manner the value to the desired level of
+precision (if supported by the source language). This method may be useful in
+preventing rounding errors when using \func{floor} and~\func{ceil} functions.
+
+\begin{ex}
+  In IEEE 754 ^[floating-point!IEEE 754!binary32] floating-point, $0.1-0.01
+  \approx 0.09000000000000001$. This will cause problems if we try to round to
+  the nearest penny, as it would then produce $0.10$ instead of the intended
+  $0.09$. This problem may be eliminated by truncating the value to two decimal
+  places before rounding, if supported by the source language.\footnote{In
+  ^[JavaScript], one could use the convoluted syntax
+  \code{+(0.1-0.01).toPrecision(1)} to yield $0.09$. In ^[PHP], \func{round} will
+  produce the closest floating-point approximation, which could potentially
+  introduce other problems, but happens to work in this case.}
+\end{ex}
+
+\begin{ex}
+  One sure way of truncating a value is to store the portion of the significand
+  desired into an integer. For example, we could obtain $0.09$ by multiplying by
+  $100$, perform integer arithmetic and then divide by $100$ once we are done.
+\end{ex}
+\index{floating-point!rounding|)}
+\index{floating-point|)}
+
+\enddeptgroup

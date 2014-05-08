@@ -1,0 +1,84 @@
+% Input Data
+
+\label{s:indata}
+
+\sectiondept{it}
+
+The implementation \shall accept input in a manner described by
+\sref{hostenv-qs}.
+
+\p{indata} The implementation \shall accept dynamic input data as an
+associative array of values whereby the key represents the name of the input
+parameter and its associated value is a vector of (a)~character strings or
+(b)~an arbitrarily deep array of character strings. An implementation \shall
+support at least a vector of character strings to satisfy condition~(b), but
+\may choose to support a greater depth for implementation-specific data.
+
+\p{indata-vscalar} When a scalar is expected, an implementation \shall also
+accept a vector $v$, but \shall recognize only the first index $v_0$ of the
+vector and \shall act as though $v_0$ was the provided scalar.
+
+An implementation \shall implicitly return all undefined parameter requests as
+the scalar floating-point value $0.00$. This includes undefined indexes on
+defined parameters as well as undefined indexes on undefined parameters.
+
+\p{determ} The implementation \shall be ^[deterministic]---that is, its
+operation \shall be controlled exclusively by its input data and not by external
+state such as the current date or time of day, unless such data are passed as
+input data as defined by \pref{indata}.
+
+If an implementation relies on a ^[input data!third-party service] for a
+calculation~$c$, then the implementation is \exempt from the requirements of
+\pref{determ} only so far as is necessary to retrieve the data from the
+third-party service and populate~$c$; no other exemptions are permitted.
+
+If multiple arguments are provided for the same ^parameter name, the
+implementation \must fail in error, unless an implementation cannot be aware of
+such a condition.\footnote{As an example, a ^JavaScript object literal with
+duplicate fields does not throw an error, but instead silently drops
+duplicates.}
+
+
+\index{parameter type|(}
+
+\section{Parameter Type Definitions}
+\label{s:paramtypes}
+\sectiondept{it}
+An implementation \may use alternative names for these types, or neglect to
+implement the types at all, so long as the output and error conditions of the
+implementation cannot be distinguished in any way from an implementation that
+does implement the parameter types defined in this section.
+
+\begin{ex}
+  If a parameter type is simply an ^[parameter type!alias] of another type, an
+  implementation may decide to use the corresponding base type. If a parameter
+  type is simply a restriction on its base type, an implementation may apply
+  such a domain restriction however it sees fit---e.g., a block of conditionals.
+\end{ex}
+
+\subsection{Base Parameter Types}
+\sectiondept{it}
+The parameters defined within this section are not derived from any other
+parameter types and are known as \dfn{parameter type!base parameter types}.
+
+All other parameter types not defined within this section \shall be derived from
+these base types; such parameters are known as \dfn{parameter type!derived
+parameter types}.
+
+\begin{description}
+  \typedef core bool:
+  Boolean---any datatype able to hold a `yes' or `no' value ($1$ or $0$
+  respectively)
+
+  \typedef core float:
+  Single-precision binary floating-point number (as defined by IEEE 754
+  binary32)
+
+  \typedef core int:
+  Any signed 32-bit integer
+\end{description}
+
+\index{parameter type|)}
+
+%% content set with \inputtypes will be outptu at this point
+
