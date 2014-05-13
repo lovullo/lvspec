@@ -57,7 +57,7 @@
 
 \terminology{%
   \subsection{Rater Terminology}
-  \input{dfn/rater}
+  \input{raterspec/sec/rater-dfn}
 }
 
 %% note: \pnumoff and \pnumon are temporary kluges (...hopefully)

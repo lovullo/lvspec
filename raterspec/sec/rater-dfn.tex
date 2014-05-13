@@ -1,0 +1,57 @@
+% Insurance Terminology
+%
+% Intended to be included within its own section.
+
+\begindeptgroup{it}
+
+\begin{description}
+  \dt{calculation}
+  Any computation performed for the purpose of returning to the caller.
+
+  \dt{Calc DSL}
+  The domain-specific language written to handle classifications and
+  calculations; compiles into JavaScript.
+
+  \dt{caller}
+  User or system that performed a rating request.
+
+  \dt{classification}
+  A set of criteria---to be run by a classifier---that returns a boolean value
+  of true if a given datum meets the criteria; otherwise, false. The return
+  value shall have the same dimensions as the input datum.
+
+  \dt{classifier}
+  A system that performs any number of classifications.
+
+  \dt{fail}
+  Within context of an operation: The implementation \shallnot return the
+  results of any calculation.
+
+  \dt{number}
+  A scalar of type integer or float
+
+  \dt{matrix}
+  A two-dimensional array of numbers; a vector of vectors.
+
+  \dt{Program Client}
+  The graphical user interface available on the LoVullo website used to gather
+  data from the user for purposes of providing a quote or indication;
+  communicates with Quote Server.
+
+  \dt{Quote Server}
+  Software that serves requests from the Program Client, performing activities
+  such as serving steps, saving data entered by the user, and proxying rate
+  requests.
+
+  \dt{program}
+  A line of business.
+
+  \dt{rater}
+  Software that produces a set of premiums that are the result of applying
+  well-defined calculations to classified input data.
+
+  \dt{vector}
+  A one-dimensional array of numbers.
+\end{description}
+
+\enddeptgroup
