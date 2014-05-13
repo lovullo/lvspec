@@ -69,19 +69,28 @@
 % The host environment is the same for all new systems
 %
 
-\def\@raterspec@input@types{
-  \PackageWarning{raterspec}{Missing program-specific input parameter types!
-    \MessageBreak Define using \protect\inputtypes}
-  \todo{No input parameter types have been defined.}
+\let\@@madespec0
+
+\def\@raterspec@mkhook#1#2#3#4{
+  \expandafter\gdef\csname @raterspec@#1\endcsname{
+    \PackageWarning{raterspec}{Missing #2!
+      \MessageBreak Define using \expandafter\protect\csname#1\endcsname}%
+    \todo{No #2 have been defined.}%
+  }%
+  \expandafter\gdef\csname#1\endcsname##1{%
+    \expandafter\gdef\csname @raterspec@#1\endcsname{%
+      #3\input{##1}#4%
+    }%
+  }%
 }
 
-\def\@raterspec@input@params{
-  \PackageWarning{raterspec}{Missing input parameters!
-    \MessageBreak Define using \protect\inputparams}
-  \todo{No input parameters have been defined.}
-}
+\def\makespec{
+  \ifx\@@madespec1%
+    \PackageError{raterspec}{Duplicate call to \protect\makespec}
+  \fi
 
-\def\@lvspec@posttitle{
+  \global\let\@@madespec1
+
   \pnumoff\part{General System}\pnumon
 
   \chapter{Host Environment}
@@ -95,36 +104,38 @@
       \section{Program-Specific Parameter Types}
       \sectiondept{it/uw}
 
-      \@raterspec@input@types
+      \@raterspec@inputtypes
     \index{input data|)}
 
   \chapter{Input Parameters}
     \index{input data!parameters|(}
     \index{parameter|(}
       \input{raterspec/sec/params}
-      \@raterspec@input@params
+      \@raterspec@inputparams
 
     \index{input data!parameters|)}
     \index{parameter|)}
 }
 
 
-\def\inputtypes#1{
-  \gdef\@raterspec@input@types{
+\@raterspec@mkhook{inputtypes}{input types}
+  {%
     % can't really include a sigline here because approvial would be global
     \pnumoff
       Parameter types in this section are common to the \@title@short\ program.
     \pnumon
     \index{parameter type|(}
-      \input{#1}
-    \index{parameter type|)}
   }
-}
+  {\index{parameter type|)}}
 
-\def\inputparams#1{
-  \gdef\@raterspec@input@params{
-    \input{#1}
-  }
+\@raterspec@mkhook{inputparams}{input parameters}
+  {}
+  {}
+
+\AtEndDocument{
+  \ifx\@@madespec0
+    \PackageError{raterspec}{\protect\makespec\space was not called}
+  \fi
 }
 
 
