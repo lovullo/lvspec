@@ -70,12 +70,14 @@
 %
 
 \def\@raterspec@input@types{
-  \PackageWarning{raterspec}{Missing program-specific input parameter types!}
+  \PackageWarning{raterspec}{Missing program-specific input parameter types!
+    \MessageBreak Define using \protect\inputtypes}
   \todo{No input parameter types have been defined.}
 }
 
 \def\@raterspec@input@params{
-  \PackageWarning{raterspec}{Missing input parameters!}
+  \PackageWarning{raterspec}{Missing input parameters!
+    \MessageBreak Define using \protect\inputparams}
   \todo{No input parameters have been defined.}
 }
 
