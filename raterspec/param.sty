@@ -40,7 +40,8 @@
     % ensure that the parent type actually exists
     \ifx\@root\@coreptype\else%
       \expandafter\ifx\csname ptype@\@type\endcsname\relax%
-        \PackageWarning{raterspec}{unknown parent param type `\@type' for `#2'}
+        \PackageTenativeError{raterspec}{%
+          unknown parent param type `\@type' for `#2'}
       \fi%
     \fi%
     % process any keywords
@@ -111,7 +112,7 @@
 \def\unionv#1{%
   % does this type exist?
   \expandafter\ifx\csname ptype@#1\endcsname\relax%
-  \PackageWarning{raterspec}{unknown param type `#1' for union}
+  \PackageTenativeError{raterspec}{unknown param type `#1' for union}
   \fi%
   \item{\typeref{#1}}
 }
@@ -164,7 +165,7 @@
 \def\@type@exists@err#1{{%
   \expandafter\let\expandafter\@chk\csname ptype@#1\endcsname
   \ifx\@chk\relax
-  \PackageWarning{raterspec}{parameter `#1' is undefined}%
+  \PackageTenativeError{raterspec}{parameter `#1' is undefined}%
   \fi
 }}
 \def\@const@exists@err#1{{%
@@ -172,7 +173,7 @@
   \@ifnumeric{#1}\else
     \expandafter\let\expandafter\@chk\csname const@#1\endcsname
     \ifx\@chk\relax
-      \PackageWarning{raterspec}{constant `#1' is undefined}%
+      \PackageTenativeError{raterspec}{constant `#1' is undefined}%
     \fi
   \fi
 }}
@@ -217,7 +218,7 @@
     % does the given type exist (note that this check assumes that the typedef
     % appears before the param in the specs, as is currently the case)
     \expandafter\ifx\csname ptype@\@type\endcsname\relax%
-      \PackageWarning{raterspec}{unknown param type: \@type}
+      \PackageTenativeError{raterspec}{unknown param type: \@type}
     \fi%
     % typeset definition with link
     \item[%
@@ -257,7 +258,7 @@
   \endlinechar-1\relax
   \expandafter\let\expandafter\@@chk\csname param@#1\endcsname
   \ifx\@@chk\relax
-    \PackageWarning{raterspec}{unknown param: #1}
+    \PackageTenativeError{raterspec}{unknown param: #1}
   \fi
   \index{parameter!#1@\texttt{#1}}%
   \hyperlink{@param:#1}%
@@ -269,7 +270,7 @@
 \def\paramrefd#1{%
   \expandafter\let\expandafter\@@pchk\csname param@#1\endcsname
   \ifx\@@pchk\empty
-    \PackageWarning{raterspec}{Unknown parameter: #1}%
+    \PackageTenativeError{raterspec}{Unknown parameter: #1}%
   \else
     % output
     \@@pchk

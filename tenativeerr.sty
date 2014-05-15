@@ -1,0 +1,13 @@
+% Provides warnings that are escalated to errors when a flag is set
+%%
+
+%%
+% Define \tenerr to escalate to errors
+%%
+
+\expandafter\ifx\csname tenerr\endcsname\relax
+  \let\PackageTenativeError\PackageWarning
+\else
+  \let\PackageTenativeError\PackageError
+\fi
+

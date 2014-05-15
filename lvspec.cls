@@ -21,6 +21,7 @@
 \LoadClass[10pt]{scrreprt}
 
 \RequirePackage{xparse}
+\RequirePackage{tenativeerr}
 
 \RequirePackage[top=4.5cm,bottom=5cm,width=\textwidth]{geometry}
 \RequirePackage{makeidx}
