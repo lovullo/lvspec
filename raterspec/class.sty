@@ -74,7 +74,7 @@
     \expandafter\let\expandafter\@@chk\csname classify@#1\endcsname
     \ifx\@@chk\relax
       % no known custom type (may be a normal ref)
-      \PackageWarning{dwspec}{unknown magic ref `#1'}%
+      \PackageWarning{raterspec}{unknown magic ref `#1'}%
     \else
       \classifyref{#1}%
     \fi
@@ -281,7 +281,7 @@
 \def\@class@desc#1{{%
   \expandafter\let\expandafter\@@chk\csname classify@#1\endcsname
   \ifx\@@chk\relax
-    \PackageWarning{dwspec}{unknown classification `#1'}%
+    \PackageWarning{raterspec}{unknown classification `#1'}%
   \else
     \@@chk
   \fi
@@ -294,7 +294,7 @@
   % fail if neither exists
   \ifx\@@pchk\relax
     \ifx\@@cchk\relax
-      \PackageWarning{dwspec}{unknown identifier for classification match: #1}
+      \PackageWarning{raterspec}{unknown identifier for classification match: #1}
     \else
       % output
       \@@cchk
