@@ -24,6 +24,11 @@
     \edef\@root{\@ptype@root#1<||}%
     \edef\@type{\@ptype@type#1<#1>||}%
     \expandafter\gdef\csname ptype@#2\endcsname{#3}%
+    % place definition into aux file; will be available next pass
+    \protected@write\@auxout{}{%
+      \string\expandafter\string\gdef
+      \string\csname\space ptype@#2\string\endcsname{#3}%
+    }%
     % typeset definition with link
     \item[%
       \hypertarget{@ptype:#2}{#2}%
@@ -35,7 +40,7 @@
     % ensure that the parent type actually exists
     \ifx\@root\@coreptype\else%
       \expandafter\ifx\csname ptype@\@type\endcsname\relax%
-        \errmessage{unknown parent param type `\@type' for `#2'}
+        \PackageWarning{raterspec}{unknown parent param type `\@type' for `#2'}
       \fi%
     \fi%
     % process any keywords
@@ -76,6 +81,13 @@
   % define constant
   \expandafter\gdef\csname const@#2\endcsname{#1}%
   \expandafter\gdef\csname const@value@#2\endcsname{#3}%
+  % place definition into aux file; will be available next pass
+  \protected@write\@auxout{}{%
+    \string\expandafter\string\gdef
+    \string\csname\space const@#2\string\endcsname{#1}%
+    \string\expandafter\string\gdef
+    \string\csname\space constvalue@#2\string\endcsname{#3}%
+  }%
   % typeset
   \index{constant!{\tt#2}}%
   {\tt\hypertarget{@const:#2}{#2}} & $#3$ & #1 \\
@@ -99,7 +111,7 @@
 \def\unionv#1{%
   % does this type exist?
   \expandafter\ifx\csname ptype@#1\endcsname\relax%
-    \errmessage{unknown param type `#1' for union}
+  \PackageWarning{raterspec}{unknown param type `#1' for union}
   \fi%
   \item{\typeref{#1}}
 }
@@ -152,7 +164,7 @@
 \def\@type@exists@err#1{{%
   \expandafter\let\expandafter\@chk\csname ptype@#1\endcsname
   \ifx\@chk\relax
-    \errmessage{parameter `#1' is undefined}%
+  \PackageWarning{raterspec}{parameter `#1' is undefined}%
   \fi
 }}
 \def\@const@exists@err#1{{%
@@ -160,7 +172,7 @@
   \@ifnumeric{#1}\else
     \expandafter\let\expandafter\@chk\csname const@#1\endcsname
     \ifx\@chk\relax
-      \errmessage{constant `#1' is undefined}%
+      \PackageWarning{raterspec}{constant `#1' is undefined}%
     \fi
   \fi
 }}
@@ -197,10 +209,15 @@
     \edef\@root{\@ptype@root#1<||}%
     \edef\@type{\@ptype@type#1<#1>||}%
     \expandafter\gdef\csname param@#2\endcsname{#3}%
+    % place definition into aux file; will be available next pass
+    \protected@write\@auxout{}{%
+      \string\expandafter\string\gdef
+      \string\csname\space param@#2\string\endcsname{#3}%
+    }%
     % does the given type exist (note that this check assumes that the typedef
     % appears before the param in the specs, as is currently the case)
     \expandafter\ifx\csname ptype@\@type\endcsname\relax%
-      \errmessage{unknown param type: \@type}
+      \PackageWarning{raterspec}{unknown param type: \@type}
     \fi%
     % typeset definition with link
     \item[%
@@ -240,7 +257,7 @@
   \endlinechar-1\relax
   \expandafter\let\expandafter\@@chk\csname param@#1\endcsname
   \ifx\@@chk\relax
-    \PackageError{dwspec}{unknown param: #1}
+    \PackageWarning{raterspec}{unknown param: #1}
   \fi
   \index{parameter!#1@\texttt{#1}}%
   \hyperlink{@param:#1}%
@@ -252,7 +269,7 @@
 \def\paramrefd#1{%
   \expandafter\let\expandafter\@@pchk\csname param@#1\endcsname
   \ifx\@@pchk\empty
-    \PackageError{dwspec}{Unknown parameter: #1}%
+    \PackageWarning{raterspec}{Unknown parameter: #1}%
   \else
     % output
     \@@pchk
