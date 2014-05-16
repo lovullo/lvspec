@@ -129,6 +129,10 @@
   {}
   {}
 
+\@raterspec@mkhook{forms}{forms}
+  {}
+  {}
+
 
 
 %%
