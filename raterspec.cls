@@ -73,6 +73,7 @@
   \expandafter\gdef\csname @raterspec@#1\endcsname{
     \PackageWarning{raterspec}{Missing #2!
       \MessageBreak Define using \expandafter\protect\csname#1\endcsname}%
+    \incomplete
     \todo{No #2 have been defined.}%
   }
   % publically accessible input macro
@@ -122,6 +123,22 @@
   {}
 
 \@raterspec@mkhook{dataclass}{data classifications}
+  {}
+  {}
+
+\@raterspec@mkhook{premcalc}{premium calculations}
+  {}
+  {}
+
+\@raterspec@mkhook{forms}{forms}
+  {}
+  {}
+
+\@raterspec@mkhook{coneimport}{c1 import details}
+  {}
+  {}
+
+\@raterspec@mkhook{proguisteps}{program ui steps}
   {}
   {}
 

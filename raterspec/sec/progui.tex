@@ -1,0 +1,112 @@
+% raterspec program ui
+%%
+
+\chapter{Program Client}
+\label{s:programui}
+\index{Program Client|(}
+
+\sectiondept{it}
+
+The \dfn{Program Client} is defined as the user interface that is used to
+enter data about a ^Quote, receive a premium from one or more
+^[supplier]s, and~optionally submit the~^Quote for further processing from
+within ^[ConceptOne].
+
+The Program Client \shall be accessed by using a~^[web browser] to
+download the applicable resources---specifically, ^[HTML], ^[CSS], and
+^[JavaScript]---from the ^[LoVullo Website].
+
+\incomplete
+\todo{While this chapter does contain information necessary to complete
+the Scottsdale Commercial Lines project, it is largely incomplete.}
+
+
+\section{Program UI}\label{s:program-ui}
+\sectiondept{it}
+  \index{Program Client!Program UI|(}
+
+  The \dfn{Program UI}---hereinafter occasionally referred to simply as
+  ``UI'' unambiguously within this chapter---\shall be defined as the
+  graphical user interface of the~Program Client and \shall render
+  directly in the user's ^[web browser] using only ^[HTML], ^[CSS],
+  and~^[JavaScript].\footnote{For example, browser plugins such as Java
+  and~Flash \shallnot be used in an implementation of the Program Client.}
+
+  A \dfn{Program Client!quoting step} is the highest level of ^Quote data
+  separation and consists only of question groups. The UI \shall display
+  no more than one step (see~\sref{program-steps}) to the ^user at any
+  given time.
+
+  \incomplete
+  A \dfn{Program Client!field group} contains only fields and provides an
+  optional delineation from other groups. Any number of groups \may be
+  displayed to the~^user at any given time.\todo{Types.}
+
+  A \dfn{Program Client!field} is a generic term that represents any
+  question, answer, display, or static element; any of these may appear
+  where a field is expected unless the field specification does not permit
+  such a field type.\footnote{For example, if a field is expected, then a
+    question or an~answer may be substituted.  However, if a~question is
+  expected, then an~answer may not be substituted.}
+
+  \incomplete
+  A \dfn{Program Client!question} prompts the ^user for a datum and may be
+  directly modified by the user unless explicitly restricted. \todo{How
+  interacts with bucket; types.}
+
+  \incomplete
+  A \dfn{Program Client!answer} displays a~^user response associated with
+  a~question. \todo{Types}
+
+  \incomplete
+  A \dfn{Program Client!display} displays any arbitrary bucket datum to
+  the~^user. \todo{Bucket.}
+
+  \incomplete
+  A \dfn{Program Client!static element} displays arbitrary static text to
+  the~user and \may contain ^[HTML].
+  \index{Program Client!Program UI|)}
+
+\begindeptgroup{uw/pm}
+  \section{Quoting Steps}\label{s:program-steps}
+  \incomplete
+  An implementation \shall display all steps, groups, and~fields (each defined
+  in~\sref{program-ui}) in the exact order provided within this section.
+  \todo{An~implementation \shall contain no steps, groups, or~fields that have not
+  been enumerated in this section.}
+
+  \sigauth{NL}
+  Within this section, questions are listed by the~labels that \shall be displayed
+  to the user. Below the label is additional text describing further
+  implementation requirements. When a question is indented to the level of the
+  paragraph of another question, then the indented question is strongly related to
+  the containing question in some logical manner; the containing question is said
+  to be a~\dfn{Program Client!question!parent question} any the~question that is
+  indented relative to it is said to be a~\dfn{Program Client!question!child
+  question}.\footnote{For example, a child question may be visible to the ^user
+  only when its~parent is answered in a specified manner.}
+
+  \incomplete
+  A question is said to be \dfn{Program Client!question!applicable} when it is to
+  be displayed to the user; questions are applicable by default. A question \shall
+  be visible to the user for entry only if it is applicable; otherwise, it \shall
+  be hidden from the user, its value reset to the specified default or---if no
+  default is specified---the default for its question type, and validations
+  \shallnot be performed. \todo{Question type defaults and validations}.
+
+
+  %% user-provided input
+  \proguistepsout
+\enddeptgroup
+
+
+\section{Quote Server Communication}
+  \sectiondept{it}
+  \index{Quote Server|(}
+
+  The Program Client \shall communicate with the~^[Quote Server] as required
+  in~\sref{hostenv-qs}.
+
+  \index{Quote Server|)}
+\index{Program Client|)}
+
