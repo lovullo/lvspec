@@ -6,6 +6,12 @@
 \ProcessOptions\relax
 
 
+\def\var#1{{\tt#1}}%
+\def\locvar#1{\var{#1}_\loc}
+\def\tlookup#1#2{\ArgSty{#2 from} \tref{#1}}%
+\def\tlookupf#1#2{\tlookup{#1}{#2} \ArgSty{or fail in error}}%
+
+
 \newenvironment{ratetable*}[5][]%
   {%
     \def\@@lotcaption{#1}

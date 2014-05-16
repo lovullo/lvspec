@@ -1,0 +1,69 @@
+% Common definitions for premium calculation
+\sectiondept{it}
+
+\sigauth{MTG}
+A \dfn{premium calculation}---or simply \dfn{calculation}---is an algorithm that
+\index{deterministic}deterministically operates on ^[input data] described in
+\sref{indata} and yields a numeric \dfn{premium}.
+
+\sigauth{MTG}
+\p{finalprem}
+A \dfn{premium!final premium} is the ^[premium] that represents the total cost
+to the insured and \shall be represented by a ^[floating-point] number rounded
+to the nearest representable value of two decimal places, in which the whole
+integer value \shall represent a dollar amount and the fractional value \shall
+represent cents. There \shall be only one final premium.\footnote{Multiple
+^[final premium]s may be obtained through multiple calls to the~^[rater].}
+
+\sigauth{MTG}
+A calculation \dfn{calculation!consideration} is defined as the point when an
+implementation determines if the calculation is applicable to the ^[input data].
+
+\sigauth{MTG}
+\p{calc-supp}
+All defined rating calculations \shall be considered even if they exist outside
+of any dependency tree that arrives at the ^[premium!final premium].
+Calculations that are not directly used to determine the ^[premium!final
+premium] are termed \dfn{calculation!disjoint calculations}.\footnote{This
+allows supplementary data to be calculated.}
+
+\sigauth{MTG}
+\p{calcapplicable} A calculation \shall be
+\index{calculation!consideration}considered to be applicable if its defined
+^[classification] conditions are met.
+
+\sigauth{MTG}
+An applicable calculation \shall undergo \dfn{calculation!evaluation}, yielding
+a~premium that is the result of the application of the ^[input data] to its
+definition.
+
+\sigauth{MTG}
+A calculation that has been determined to be inapplicable \shallnot execute any
+portion of its definition and \shall yield the scalar floating-point
+value~$0.00$.\footnote{The definition \shallnot be executed because it cannot
+reliably do so without the proper data (as determined by its required
+classifications).}
+
+\sigauth{MTG}
+A calculation \may treat the result of another calculation as ^[input data].
+
+\sigauth{MTG}
+A calculation \may treat the result of a~^[classification] (see
+\sref{dataclass}) as ^[input data].
+
+\sigauth{MTG}
+Where it is required that a calculation be performed for each ^[location], the
+implementation \shall make such a determination either by (a)~use of a
+^[parameter] defined in \sref{locparam} that is always available or (b)~an
+implementation-defined ^[parameter] that explicitly provides the location count.
+For either case, an implementation \must fail in error if the location count
+cannot be determined.
+
+\sigauth{MTG}
+In the sections that follow, the following conventions \shall hold: (a)~Any
+reference to a table value, unless otherwise stated, \shall be located by
+matching the ^[parameter]s in the table column headers with the value of the
+associated argument in any input data; (b)~any ^[parameter] containing the
+term~``rate'' represents a~value obtained in an implementation-defined manner
+and an implementation \must fail in error if such a value cannot be obtained as
+mandated by the calculation definition.

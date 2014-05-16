@@ -125,6 +125,10 @@
   {}
   {}
 
+\@raterspec@mkhook{premcalc}{premium calculations}
+  {}
+  {}
+
 
 
 %%
