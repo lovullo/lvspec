@@ -60,8 +60,6 @@
   \input{raterspec/sec/rater-dfn}
 }
 
-%% note: \pnumoff and \pnumon are temporary kluges (...hopefully)
-
 
 %%
 % Beginning of document
@@ -94,33 +92,19 @@
   \fi
 
   \global\let\@@madespec1
-
-  \pnumoff\part{General System}\pnumon
-
-  \chapter{Host Environment}
-    \input{raterspec/sec/hostenv}
-
-  \chapter{Input Data}
-    \index{input data|(}
-      \input{raterspec/sec/input}
-
-      % implementation-specific parameter types
-      \section{Program-Specific Parameter Types}
-      \sectiondept{it/uw}
-
-      \@raterspec@inputtypes
-    \index{input data|)}
-
-  \chapter{Input Parameters}
-    \index{input data!parameters|(}
-    \index{parameter|(}
-      \input{raterspec/sec/params}
-      \@raterspec@inputparams
-
-    \index{input data!parameters|)}
-    \index{parameter|)}
+  \input{raterspec/parts}
 }
 
+\AtEndDocument{
+  \ifx\@@madespec0
+    \PackageError{raterspec}{\protect\makespec\space was not called}
+  \fi
+}
+
+
+%%
+% Document hooks
+%%
 
 \@raterspec@mkhook{inputtypes}{input types}
   {%
@@ -135,12 +119,6 @@
 \@raterspec@mkhook{inputparams}{input parameters}
   {}
   {}
-
-\AtEndDocument{
-  \ifx\@@madespec0
-    \PackageError{raterspec}{\protect\makespec\space was not called}
-  \fi
-}
 
 
 
