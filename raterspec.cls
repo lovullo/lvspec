@@ -76,12 +76,16 @@
     \PackageWarning{raterspec}{Missing #2!
       \MessageBreak Define using \expandafter\protect\csname#1\endcsname}%
     \todo{No #2 have been defined.}%
-  }%
+  }
   \expandafter\gdef\csname#1\endcsname##1{%
     \expandafter\gdef\csname @raterspec@#1\endcsname{%
       #3\input{##1}#4%
     }%
-  }%
+  }
+  % publically accessible output macro
+  \expandafter\gdef\csname#1out\endcsname{%
+    \csname @raterspec@#1\endcsname
+  }
 }
 
 \def\makespec{
