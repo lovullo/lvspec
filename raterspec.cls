@@ -75,7 +75,8 @@
       \MessageBreak Define using \expandafter\protect\csname#1\endcsname}%
     \todo{No #2 have been defined.}%
   }
-  \expandafter\gdef\csname#1\endcsname##1{%
+  % publically accessible input macro
+  \expandafter\gdef\csname#1in\endcsname##1{%
     \expandafter\gdef\csname @raterspec@#1\endcsname{%
       #3\input{##1}#4%
     }%
@@ -112,7 +113,7 @@
     \pnumoff
       Parameter types in this section are common to the \@title@short\ program.
     \pnumon
-    \index{parameter type|(}
+    \index{parameter type|(}%
   }
   {\index{parameter type|)}}
 
