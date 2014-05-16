@@ -133,6 +133,10 @@
   {}
   {}
 
+\@raterspec@mkhook{coneimport}{c1 import details}
+  {}
+  {}
+
 
 
 %%
