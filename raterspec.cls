@@ -121,6 +121,10 @@
   {}
   {}
 
+\@raterspec@mkhook{dataclass}{data classifications}
+  {}
+  {}
+
 
 
 %%

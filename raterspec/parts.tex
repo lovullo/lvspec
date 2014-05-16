@@ -1,0 +1,35 @@
+% raterspec common structure
+%%
+
+%% note: \pnumoff and \pnumon are temporary kluges (...hopefully)
+
+
+\pnumoff\part{General System}\pnumon
+
+\chapter{Host Environment}
+  \input{raterspec/sec/hostenv}
+
+\chapter{Input Data}
+  \index{input data|(}
+    \input{raterspec/sec/input}
+
+    % implementation-specific parameter types
+    \section{Program-Specific Parameter Types}
+    \sectiondept{it/uw}
+
+    \inputtypesout
+  \index{input data|)}
+
+\chapter{Input Parameters}
+  \index{input data!parameters|(}
+  \index{parameter|(}
+    \input{raterspec/sec/params}
+    \inputparamsout
+
+  \index{input data!parameters|)}
+  \index{parameter|)}
+
+
+\pnumoff\part{Data Classification}\pnumon
+  \input{raterspec/sec/dataclass}
+
