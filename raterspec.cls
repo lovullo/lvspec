@@ -138,6 +138,10 @@
   {}
   {}
 
+\@raterspec@mkhook{proguisteps}{program ui steps}
+  {}
+  {}
+
 
 
 %%
