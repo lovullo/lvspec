@@ -27,11 +27,13 @@
   }
 
 
-\def\@qtypedesc@text{any string of characters.}
-\def\@qtypedesc@number{any whole number.}
+\def\@qtypedesc@currency{any dollar and cent amount.}
+\def\@qtypedesc@date{a valid date.}
 \def\@qtypedesc@float{any floating point value.}
 \def\@qtypedesc@noyes{one of either {\sl No\/} or~{\sl Yes}.}
+\def\@qtypedesc@number{any whole number.}
 \def\@qtypedesc@select{one of the options enumerated below:}
+\def\@qtypedesc@text{any string of characters.}
 \newcommand\question[5][]{%
   \item
     \beginundersletter
@@ -48,6 +50,7 @@
     \vskip-1.5\baselineskip
     \ignorespaces{\sf#5}\unskip
     \par
+    \vskip-0.5\baselineskip
   \@margin@sig
   \begingroup
     \def\@mapsto{#3}%
