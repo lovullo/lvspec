@@ -36,7 +36,7 @@
 %%
 % Rater-specific specification additions
 %
-% This should be called before beginning the documet environment
+% This should be called before beginning the document environment
 %
 \def\@RaterProgramName#1{
   \gdef\@lvspec@pretitle{%
@@ -76,13 +76,13 @@
     \incomplete
     \todo{No #2 have been defined.}%
   }
-  % publically accessible input macro
+  % publicly accessible input macro
   \expandafter\gdef\csname#1in\endcsname##1{%
     \expandafter\gdef\csname @raterspec@#1\endcsname{%
       #3\input{##1}#4%
     }%
   }
-  % publically accessible output macro
+  % publicly accessible output macro
   \expandafter\gdef\csname#1out\endcsname{%
     \csname @raterspec@#1\endcsname
   }
@@ -110,7 +110,7 @@
 
 \@raterspec@mkhook{inputtypes}{input types}
   {%
-    % can't really include a sigline here because approvial would be global
+    % can't really include a sigline here because approval would be global
     \pnumoff
       Parameter types in this section are common to the \@title@short\ program.
     \pnumon
