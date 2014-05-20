@@ -20,7 +20,7 @@
 \newenvironment{subquestions}%
   {%
     \begin{description}%
-    \advance\questionparsep by \leftmargin\relax
+    \advance\questionparsep by \parindent\relax
   }
   {%
     \end{description}%
@@ -33,7 +33,7 @@
 \def\@qtypedesc@noyes{one of either {\sl No\/} or~{\sl Yes}.}
 \def\@qtypedesc@select{one of the options enumerated below:}
 \newcommand\question[5][]{%
-  \item[%
+  \item
     \beginundersletter
       \llap{%
         \tt\scriptsize\raisebox{-1em}[0em][0em]{%
@@ -45,8 +45,9 @@
         \hspace{\the\questionparsep}%
       }%
     \endundersletter
-    \ignorespaces#5\unskip
-  ]\hfill\\
+    \vskip-1.5\baselineskip
+    \ignorespaces{\sf#5}\unskip
+    \par
   \@margin@sig
   \begingroup
     \def\@mapsto{#3}%
