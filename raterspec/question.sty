@@ -59,7 +59,12 @@
     \ifx\@mapsto\empty
       \May not map to any rater input parameter.%
     \else
-      \Shall map to rater input parameter \paramref{#3}.%
+      \Shall map to rater input parameter
+      \if\@mapsto-%
+       \paramref{#2}%
+      \else
+       \paramref{#3}%
+      \fi.%
     \fi
   \endgroup
   \space Input value \shall be \csname @qtypedesc@#4\endcsname\space
