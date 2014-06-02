@@ -22,6 +22,7 @@
 \RequirePackage{raterspec/form}
 \RequirePackage{raterspec/c1import}
 \RequirePackage{lvflow}
+\RequirePackage{longtable}
 %\RequirePackage{premcalc}
 
 
