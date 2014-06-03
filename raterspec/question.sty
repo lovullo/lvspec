@@ -55,16 +55,17 @@
     \vskip-0.5\baselineskip
   \@margin@sig
   \begingroup
-    \def\@mapsto{#3}%
-    \ifx\@mapsto\empty
+    \def\@@qid{#2}%
+    \def\@@mapid{#3}%
+    \def\@@dash{-}%
+    \ifx\@@mapid\empty
       \May not map to any rater input parameter.%
     \else
+      \ifx\@@mapid\@@dash%
+        \let\@@mapid\@@qid
+      \fi
       \Shall map to rater input parameter
-      \if\@mapsto-%
-       \paramref{#2}%
-      \else
-       \paramref{#3}%
-      \fi.%
+      \expandafter\paramref\expandafter{\@@mapid}.%
     \fi
   \endgroup
   \space Input value \shall be \csname @qtypedesc@#4\endcsname\space
