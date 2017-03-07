@@ -1,0 +1,27 @@
+image: lovullo/tex-ci
+
+stages:
+    - build
+    - deploy
+
+build:
+    stage: build
+    script:
+        - make -B
+    artifacts:
+        paths:
+            - lvspec.pdf
+        expire_in: 30 min
+
+pages:
+    stage: deploy
+    script:
+        - mkdir public
+        - mv lvspec.pdf public/
+    artifacts:
+        paths:
+            - public/
+        expire_in: 30 min
+    only:
+        - master
+
